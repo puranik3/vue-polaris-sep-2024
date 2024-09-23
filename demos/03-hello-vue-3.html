@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script>
+
+        <script>
+            // v2
+            const root = Vue.createApp({
+                // el option is removed in Vue 3
+                // el: "#app",
+
+                // either a data object (does not work in Vue 3),
+                // data: {
+                //     message: "Hello Vue",
+                // },
+
+                // a function that returns the data object (works in Vue 2, 3)
+                data() {
+                    return {
+                        message: "Hello Vue",
+                    };
+                },
+                template: `
+                    <div>
+                        <h1>Getting started with Vue</h1>
+                        <div>{{ message }}</div>
+                    </div>
+                `,
+            });
+
+            // execute any other logic
+            // ...
+
+            // $mount (Vue 2) -> mount (Vue 3)
+            root.mount("#app");
+        </script>
+    </body>
+</html>
