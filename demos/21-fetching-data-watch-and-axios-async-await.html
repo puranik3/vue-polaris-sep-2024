@@ -19,10 +19,15 @@
 
         <script>
             // using fetch - we have not handled error using catch - whoever calls getWorkshops() will handle the error (if any)
-            const getWorkshops = async () => {
+            const getWorkshops = async (page = 1) => {
                 try {
                     const response = await axios.get(
-                        `https://workshops-server.onrender.com/workshops`
+                        `https://workshops-server.onrender.com/workshops`,
+                        {
+                            params: {
+                                _page: page,
+                            },
+                        }
                     );
 
                     return response.data;
@@ -39,6 +44,28 @@
                     loading: true,
                     error: null,
                     workshops: [],
+                    page: 1,
+                },
+                methods: {
+                    async getWorkshops() {
+                        try {
+                            const workshops = await getWorkshops(this.page);
+                            this.workshops = workshops;
+                        } catch (error) {
+                            this.error = error;
+                        } finally {
+                            this.loading = false;
+                        }
+                    },
+                },
+                // watch is used to monitor change on some data item and run some logic (not to compute derived data from existing data - for that we have computed. computed is for deriving data synchronously. watch is for doing something asynchronously - like making call to the backend.)
+                watch: {
+                    // when page changes, we want to fetch fresh workshops and set the workshops data property
+                    page() {
+                        this.getWorkshops();
+
+                        // nothing returned unlike computed property's method
+                    },
                 },
                 template: `
                     <div class="container my-5">
@@ -58,6 +85,13 @@
                         </div>
 
                         <div class="row" v-else>
+                            <div class="col-12">
+                                You are viewing page {{ page }}
+                                <div>
+                                    <button class="btn btn-sm btn-primary" @click="--page">Previous</button>
+                                    <button class="btn btn-sm btn-primary" @click="++page">Next</button>
+                                </div>
+                            </div>
 
                             <!-- "key" should be unique among the items in that array, and should be stable (cannot be updated) -->
 
@@ -90,17 +124,8 @@
                 created() {
                     console.log("created");
                 },
-                async mounted() {
-                    // try {
-                    const workshops = await getWorkshops();
-                    this.workshops = workshops;
-                    // }
-
-                    // catch (error) {
-                    //     this.error = error;
-                    // } finally {
-                    //     this.loading = false;
-                    // }
+                mounted() {
+                    this.getWorkshops();
                 },
             });
         </script>
