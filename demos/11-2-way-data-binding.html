@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script> -->
+
+        <script>
+            // v2
+            new Vue({
+                el: "#app",
+                // v2 -> either a data object, a function that returns the data object
+                data: {
+                    credentials: {
+                        username: "jonathan",
+                        password: "",
+                    },
+                    // x: 100
+                },
+                methods: {
+                    login(event) {
+                        event.preventDefault(); // prevent browser submission
+
+                        console.log(this.credentials); // we can see the internal accessor methods setup to detect data changes
+
+                        const credentials = {
+                            username: this.credentials.username,
+                            password: this.credentials.password,
+                        };
+
+                        console.log(credentials); // local credentials created above - no extra methods etc.
+                    },
+                },
+                template: `
+                    <div class="container my-5">
+                        <h1>Sign in</h1>
+                        <hr />
+
+                        <form @submit="login">
+                            <div class="row mb-2">
+                                <label
+                                    class="col-form-label col-12 col-md-2"
+                                    for="username"
+                                >
+                                    Username
+                                </label>
+                                <div class="col-12 col-md-10">
+                                    <input
+                                        type="text"
+                                        id="username"
+                                        class="form-control"
+                                        v-model="credentials.username"
+                                    />
+                                    <!-- <div>{{ credentials.username }}</div> -->
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label
+                                    class="col-form-label col-12 col-md-2"
+                                    for="password"
+                                >
+                                    Password
+                                </label>
+                                <div class="col-12 col-md-10">
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        class="form-control"
+                                        v-model="credentials.password"
+                                    />
+                                    <!-- <div>{{ credentials.password }}</div> -->
+                                </div>
+                            </div>
+
+                            <div>
+                                <button
+                                    type="submit"
+                                    class="btn btn-sm btn-primary"
+                                    @click=""
+                                >
+                                    Login
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>
