@@ -19,27 +19,16 @@
 
         <script>
             // using fetch - we have not handled error using catch - whoever calls getWorkshops() will handle the error (if any)
-            const getWorkshops = () => {
-                return fetch(`https://workshops-server.onrender.com/workshops`)
-                    .then((response) => {
-                        if (!response.ok) {
-                            const errorDetails =
-                                "Status Code: " +
-                                response.status +
-                                " Status Text: " +
-                                response.statusText;
-                            throw new Error(errorDetails);
-                        }
+            const getWorkshops = async () => {
+                try {
+                    const response = await axios.get(
+                        `https://workshops-server.onrender.com/workshop`
+                    );
 
-                        // we could call then() here (nested then()s, but when returning the Promise, chaining is possible like below)
-                        return response.json();
-                    })
-                    .then((workshops) => {
-                        return workshops;
-                    });
-                // .catch((error) => {
-
-                // })
+                    return response.data;
+                } catch (error) {
+                    throw new Error("Some error occured");
+                }
             };
 
             // v2
@@ -101,17 +90,17 @@
                 created() {
                     console.log("created");
                 },
-                mounted() {
-                    getWorkshops()
-                        .then((workshops) => {
-                            this.workshops = workshops;
-                        })
-                        .catch((error) => {
-                            this.error = error;
-                        })
-                        .finally(() => {
-                            this.loading = false;
-                        });
+                async mounted() {
+                    // try {
+                    const workshops = await getWorkshops();
+                    this.workshops = workshops;
+                    // }
+
+                    // catch (error) {
+                    //     this.error = error;
+                    // } finally {
+                    //     this.loading = false;
+                    // }
                 },
             });
         </script>
