@@ -110,6 +110,7 @@
                                         id="password"
                                         class="form-control"
                                         v-model="credentials.password"
+                                        @input="errors.password = credentials.password === '' ? 'Required password' : ''"
                                     />
                                     <!-- <div>{{ credentials.password }}</div> -->
                                     <div
