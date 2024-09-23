@@ -25,6 +25,10 @@
                         username: "jonathan",
                         password: "",
                     },
+                    errors: {
+                        username: "",
+                        password: "",
+                    },
                     // x: 100
                 },
                 methods: {
@@ -38,7 +42,36 @@
                             password: this.credentials.password,
                         };
 
-                        console.log(credentials); // local credentials created above - no extra methods etc.
+                        if (this.validatePassword()) {
+                            console.log("All good!");
+                            // we will send the data (here we log the data instead)
+                            console.log(credentials); // local credentials created above - no extra methods etc.
+                        } else {
+                            console.log(this.errors.password);
+                        }
+                    },
+                    validatePassword() {
+                        // validations
+                        // add a "required" check on the password
+                        // ...
+
+                        if (/[A-Z]/.test(this.credentials.password) === false) {
+                            this.errors.password =
+                                "Requires at least one uppercase letter";
+                            return false; // stop validating
+                        }
+
+                        if (/[a-z]/.test(this.credentials.password) === false) {
+                            this.errors.password =
+                                "Requires at least one lowercase letter";
+                            return false; // stop validating
+                        }
+
+                        // add more validatons
+                        // ...
+
+                        this.errors.password = ""; // clear the error
+                        return true;
                     },
                 },
                 template: `
@@ -79,6 +112,13 @@
                                         v-model="credentials.password"
                                     />
                                     <!-- <div>{{ credentials.password }}</div> -->
+                                    <div
+                                        class="text-danger"
+                                        style="font-size: 0.85em;"
+                                        v-if="errors.password"
+                                    >
+                                        {{ errors.password }}
+                                    </div>
                                 </div>
                             </div>
 
