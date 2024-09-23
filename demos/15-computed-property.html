@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script> -->
+
+        <script>
+            // v2
+            new Vue({
+                el: "#app",
+                data: {
+                    firstName: "John",
+                    lastName: "Doe",
+                    // many more data items...
+                    // filterKey: '' -> 2-way data binding with a search box using v-model
+                    // products: [ ... ],
+                },
+                computed: {
+                    // re-evaluated only when either firstname changes or lastName changes - good for performance
+                    fullName() {
+                        return `${this.firstName} ${this.lastName}`;
+                    },
+                    // filteredProducts() {
+                    //      logic to generate and return the filtered products array based on this.filterKey and this.products
+                    // }
+                },
+                methods: {
+                    getFullName() {
+                        return `${this.firstName} ${this.lastName}`;
+                    },
+                },
+                template: `
+                    <div class="container my-5">
+                        <!-- {{ firstName }} {{ lastName }} -->
+                        <!-- the method is called every time there is re-rendering -->
+                        <!-- Full name: {{ getFullName() }} -->
+
+                        Full name: {{ fullName }}
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>
