@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script> -->
+
+        <script>
+            // v2
+            new Vue({
+                el: "#app",
+                // v2 -> either a data object, a function that returns the data object
+                data: {
+                    couponCode: "NEW30",
+                },
+                template: `
+                    <div class="container my-5">
+                        <h1>My Cart</h1>
+                        <hr />
+
+                        <div
+                            class="alert alert-light"
+                            v-if="couponCode !== ''"
+                        >
+                            Coupon <span class="badge bg-primary">{{ couponCode }}</span> has been successfully applied
+                        </div>
+
+                        <!-- This button should not be shown if there is no couponCode (empty) -->
+                        <button
+                            @click="couponCode = ''"
+                            class="btn btn-sm btn-danger"
+                        >
+                            Remove coupon
+                        </button>
+
+                        <!-- Add a button which whem clicked will set NEW30 as coupon code. Button should be hidden if couponCode exists -->
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>
