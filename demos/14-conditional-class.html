@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+        <style>
+            .alert {
+                border: 1px solid black;
+                border-radius: 4px;
+                padding: 12px;
+                margin: 16px 0;
+            }
+
+            /* status classes */
+            .alert-success {
+                border-color: green;
+                background-color: lightgreen;
+            }
+
+            .alert-error {
+                border-color: crimson;
+                background-color: lightpink;
+            }
+
+            /* importance classes */
+            .alert-important {
+                font-weight: bold;
+            }
+
+            .alert-unimportant {
+                font-weight: normal;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script> -->
+
+        <script>
+            // v2
+            new Vue({
+                el: "#app",
+                // v2 -> either a data object, a function that returns the data object
+                data: {
+                    message: {
+                        text: "Mail was sent successfully",
+                        status: "success",
+                        importance: "unimportant",
+                    },
+                    successMessage: {
+                        text: "Mail was sent successfully",
+                        status: "success",
+                        importance: "unimportant",
+                    },
+                    errorMessage: {
+                        text: "Email could not be sent",
+                        status: "error",
+                        importance: "important",
+                    },
+                },
+                computed: {
+                    messageStyle() {
+                        // class specified using a string
+                        // return this.message.status === "success"
+                        //     ? "alert-success"
+                        //     : "alert-error";
+
+                        // class specified using an object
+                        return {
+                            "alert-success": this.message.status === "success",
+                            "alert-error": this.message.status === "error",
+                            "alert-important":
+                                this.message.importance === "important",
+                            "alert-unimportant":
+                                this.message.importance === "unimportant",
+                        };
+                    },
+                },
+                methods: {
+                    getMessageStyle() {
+                        return this.message.status === "success"
+                            ? "alert-success"
+                            : "alert-error";
+                    },
+                },
+                template: `
+                    <div class="container my-5">
+                        <div
+                            class="alert"
+                            :class="messageStyle"
+                        >
+                            {{ message.text }}
+                        </div>
+
+                        <!--
+                        <div
+                            class="alert"
+                            :class="messageStyle"
+                        >
+                            {{ message.text }}
+                        </div>
+                        -->
+
+                        <!--
+                        <div
+                            class="alert"
+                            :class="message.status === 'success' ? 'alert-success' : 'alert-error'"
+                        >
+                            {{ message.text }}
+                        </div>
+                        -->
+
+                        <button
+                            v-if="message.status === 'error'"
+                            @click="message = successMessage"
+                            class="btn btn-primary"
+                        >
+                                Show success message
+                        </button>
+                        <button
+                            v-else
+                            @click="message = errorMessage"
+                            class="btn btn-primary"
+                        >
+                            Show error message
+                        </button>
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>
