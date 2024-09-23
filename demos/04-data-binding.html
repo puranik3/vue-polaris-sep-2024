@@ -3,7 +3,11 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Hello Vue</title>
+        <title>Data binding</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
     </head>
     <body>
         <div id="app"></div>
@@ -15,10 +19,18 @@
             // v2
             new Vue({
                 el: "#app",
-                // v2 -> either a data object, a function that returns the data object
-                data: {},
+                data: {
+                    message: "Hello Vue 2",
+                },
                 template: `
-                    <div>
+                    <div class="container my-5">
+                        <div>{{ message }}</div>
+                        <button
+                            @click="message = 'Hello Vue 3'"
+                            class="btn btn-sm btn-primary"
+                        >
+                            Change message
+                        </button>
                     </div>
                 `,
             });
