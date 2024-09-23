@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script> -->
+
+        <!--
+            Before update (without key) virtual DOM is
+            <div>Apples</div>
+            <div>Oranges</div>
+            <div>Bananas</div>
+
+            After update (without key) virtual DOM is
+            <div>Guavas</div> -> DOM manipulation for text from Apples -> Guavas
+            <div>Apples</div> -> DOM manipulation for text from Oranges -> Apple
+            <div>Oranges</div> -> DOM manipulation for text from Bananas -> Oramges
+            <div>Bananas</div> -> DOM manipulation create a new div
+
+            4 DOM maipulation
+
+            Before update (with key) virtual DOM is
+            <div key="1">Apples</div>
+            <div key="2">Oranges</div>
+            <div key="3">Bananas</div>
+
+            After update (without key) virtual DOM is
+            <div key="4">Guavas</div> -> DOM manipulation for creating a new div
+            <div key="1">Apples</div>
+            <div key="2">Oranges</div>
+            <div key="3">Bananas</div>
+
+            1 DOM manipulation - good for performance
+        -->
+
+        <script>
+            // v2
+            new Vue({
+                el: "#app",
+                data: {
+                    fruits: [
+                        { id: 1, name: "Apples" },
+                        { id: 2, name: "Oranges" },
+                        { id: 3, name: "Bananas" },
+                    ],
+                    fruitName: "",
+                    nextId: 4,
+                },
+                methods: {
+                    addFruit() {
+                        this.fruits.unshift({
+                            id: this.nextId,
+                            name: this.fruitName,
+                        });
+
+                        ++this.nextId; // prepare id for next fruit to be added
+                        this.fruitName = ""; // clear the input field
+                    },
+                },
+                template: `
+                    <div class="container my-5">
+                        <h1>List of Fruits</h1>
+                        <hr />
+
+                        <!-- "key" should be unique among the items in that array, and should be stable (cannot be updated) -->
+                        <div class="list-group">
+                            <div
+                                class="list-group-item"
+                                v-for="fruit of fruits"
+                            >
+                                {{ fruit.name }}
+                            </div>
+                        </div>
+
+                        <h2 class="mt-5">Add a fruit</h2>
+                        <!-- keyup modifier for keyup event (run the method when Enter key is pressed) -->
+                        <input
+                            type="text"
+                            class="form-control"
+                            v-model.trim="fruitName"
+                            @keyup.enter="addFruit"
+                        />
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>
