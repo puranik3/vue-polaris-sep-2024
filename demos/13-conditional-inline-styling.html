@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script> -->
+
+        <script>
+            // v2
+            new Vue({
+                el: "#app",
+                // v2 -> either a data object, a function that returns the data object
+                data: {
+                    message: {
+                        text: "Mail was sent successfully",
+                        status: "success",
+                    },
+                    successMessage: {
+                        text: "Mail was sent successfully",
+                        status: "success",
+                    },
+                    errorMessage: {
+                        text: "Email could not be sent",
+                        status: "error",
+                    },
+                },
+                computed: {
+                    messageStyle() {
+                        // inline style specified using a string
+                        // return (
+                        //     "border: 1px solid black; border-radius: 4px; padding: 12px; margin: 16px 0;" +
+                        //     (this.message.status === "success"
+                        //         ? "border-color: green; background-color: lightgreen;"
+                        //         : "border-color: crimson; background-color : lightpink;")
+                        // );
+
+                        // inline style specified using an object
+                        const baseStyle = {
+                            border: "1px solid black",
+                            borderRadius: "4px",
+                            padding: "12px",
+                            margin: "16px 0",
+                        };
+
+                        const successStyle = {
+                            ...baseStyle,
+                            borderColor: "green",
+                            backgroundColor: "lightgreen",
+                        };
+
+                        const errorStyle = {
+                            ...baseStyle,
+                            borderColor: "crimson",
+                            backgroundColor: "lightpink",
+                        };
+
+                        return this.message.status === "success"
+                            ? successStyle
+                            : errorStyle;
+                    },
+                },
+                methods: {
+                    getMessageStyle() {
+                        return (
+                            "border: 1px solid black; border-radius: 4px; padding: 12px; margin: 16px 0;" +
+                            (this.message.status === "success"
+                                ? "border-color: green; background-color: lightgreen;"
+                                : "border-color: crimson; background-color : lightpink;")
+                        );
+                    },
+                },
+                template: `
+                    <div class="container my-5">
+                        <!-- style comes from computed property -->
+                        <!-- each time the UI updates due to change in message.status, only then it reevaulates this UI -->
+                        <div
+                            :style="messageStyle"
+                        >
+                            {{ message.text }}
+                        </div>
+
+                        <!-- method returns the style -->
+                        <!-- each time the UI updates, due to any data change the function getMessageStyle() will be called -->
+                        <!--
+                        <div
+                            :style="getMessageStyle()"
+                        >
+                            {{ message.text }}
+                        </div>
+                        -->
+
+                        <!-- style is inline -->
+                        <!--
+                        <div
+                            style="border: 1px solid black; border-radius: 4px; padding: 12px; margin: 16px 0;"
+                            :style="message.status === "success"
+                                ? "border-color: green; background-color: lightgreen;"
+                                : "border-color: crimson; background-color : lightpink;""
+                        >
+                            {{ message.text }}
+                        </div>
+                        -->
+
+                        <button
+                            v-if="message.status === 'error'"
+                            @click="message = successMessage"
+                            class="btn btn-primary"
+                        >
+                                Show success message
+                        </button>
+                        <button
+                            v-else
+                            @click="message = errorMessage"
+                            class="btn btn-primary"
+                        >
+                            Show error message
+                        </button>
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>
