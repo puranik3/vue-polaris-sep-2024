@@ -20,35 +20,21 @@
             new Vue({
                 el: "#app",
                 data: {
-                    firstName: "John",
-                    lastName: "Doe",
-
                     // many more data items...for eg...
-                    // filterKey: '' -> 2-way data binding with a search box using v-model
-                    // products: [ ... ],
+                    filterKey: "", // -> 2-way data binding with a search box using v-model
+                    products: [
+                        /* add some product objects as items */
+                    ],
                 },
                 computed: {
-                    // re-evaluated only when either this.firstName changes or this.lastName changes - good for performance
-                    fullName() {
-                        return `${this.firstName} ${this.lastName}`;
-                    },
-
                     // filteredProducts() {
                     //      logic to generate and return the filtered products array based on this.filterKey and this.products
                     // }
                 },
-                methods: {
-                    getFullName() {
-                        return `${this.firstName} ${this.lastName}`;
-                    },
-                },
                 template: `
                     <div class="container my-5">
-                        <!-- {{ firstName }} {{ lastName }} -->
-                        <!-- the method is called every time there is re-rendering -->
-                        <!-- Full name: {{ getFullName() }} -->
-
-                        Full name: {{ fullName }}
+                        <!-- add a search box and bind using v-model to filterKey -->
+                        <!-- Display filtered list items -->
                     </div>
                 `,
             });
