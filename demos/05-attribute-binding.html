@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Data binding</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script> -->
+
+        <script src="scripts/workshops.js"></script>
+
+        <script>
+            // v2
+            new Vue({
+                el: "#app",
+                data: {
+                    workshop: workshops[0],
+                },
+                template: `
+                    <div class="container my-5">
+                        <div class="card" style="width: 18rem;">
+                            <img
+                                :src="workshop.imageUrl"
+                                :alt="workshop.name"
+                                class="card-img-top"
+                            />
+                            <div class="card-body">
+                                <h5 class="card-title">{{ workshop.name }}</h5>
+                                <div class="card-text">
+                                    {{ workshop.description }}
+                                </div>
+                                <a href="#" class="btn btn-primary">Know more</a>
+                            </div>
+                        </div>
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>
