@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script> -->
+
+        <script>
+            // v2
+            const root = new Vue({
+                el: "#app",
+                // v2 -> either a data object, a function that returns the data object
+                data: {
+                    name: "Vue 2",
+                },
+                methods: {
+                    getMessage(greeting = "Hello") {
+                        // this.changeName( 'Vue 3' );
+
+                        return `${greeting} ${this.name}`;
+                    },
+                    changeName(event, name = "Vuex") {
+                        console.log(event); // the event details
+                        this.name = name;
+                    },
+                },
+                template: `
+                    <div class="container my-5">
+                        <div>{{ getMessage( 'Good morning' ) }}</div>
+
+                        <button
+                            @click="changeName( $event, 'Vue 3' )"
+                            class="btn btn-sm btn-primary"
+                        >
+                            Change to Vue 3
+                        </button>
+                        <button
+                            @click="changeName"
+                            class="btn btn-sm btn-primary"
+                        >
+                            Change to default name (Vuex)
+                        </button>
+                        <!-- Add a button that changes name to Vue 2 -->
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>
