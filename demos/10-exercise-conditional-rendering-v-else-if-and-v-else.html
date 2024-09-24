@@ -20,8 +20,33 @@
             const root = Vue.createApp({
                 data() {
                     return {
-                        couponCode: "NEW30",
+                        plan: {
+                            name: "Free",
+                            feature: "create unlimited public repositories",
+                        },
                     };
+                },
+                computed: {
+                    otherPlans() {
+                        return [];
+                    },
+                },
+                methods: {
+                    getFreePlan() {
+                        this.plan.name = "Free";
+                        this.plan.feature =
+                            "create unlimited public repositories";
+                    },
+                    getPremiumPlan() {
+                        this.plan.name = "Premium";
+                        this.plan.feature =
+                            "create unlimited private repositories";
+                    },
+                    getProPlan() {
+                        this.plan.name = "Pro";
+                        this.plan.feature =
+                            "create unlimited private repositories, you can use CoPilot";
+                    },
                 },
                 template: `
                     <div class="container my-5">
@@ -39,6 +64,34 @@
                             - Features of plan
                             - 2 Buttons to switcg to the other 2 plans
                         -->
+                        <div><strong>{{plan.name}}</strong> plan opted which offers features like <strong>{{ plan.feature }}</strong></div>
+                        <div class="my-3">
+                            <button
+                            @click = "getProPlan()"
+                            class="btn btn-sm btn-primary mx-1"
+                            v-if="plan.name !== 'Pro'"
+                            >
+                                Pro
+                            </button>
+
+                            <button
+                            @click= "getPremiumPlan()"
+                            class="btn btn-sm btn-primary mx-1"
+                            v-if="plan.name !== 'Premium'"
+                            >
+                                Premium
+                            </button>
+
+
+
+                            <button
+                            @click= "getFreePlan() "
+                            class="btn btn-sm btn-primary mx-1"
+                            v-if="plan.name !== 'Free'"
+                            >
+                                Free
+                            </button>
+                        </div>
                     </div>
                 `,
             });

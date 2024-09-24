@@ -24,17 +24,76 @@
                     filterKey: "", // -> 2-way data binding with a search box using v-model
                     products: [
                         /* add some product objects as items */
+                        { name: "P1", expiryYear: "2024" },
+                        { name: "P2", expiryYear: "2025" },
+                        { name: "P3", expiryYear: "2026" },
+                        { name: "P4", expiryYear: "2024" },
+                        { name: "P5", expiryYear: "2024" },
                     ],
                 },
                 computed: {
-                    // filteredProducts() {
-                    //      logic to generate and return the filtered products array based on this.filterKey and this.products
-                    // }
+                    filteredProducts() {
+                        //logic to generate and return the filtered products array based on this.filterKey and this.products
+                        if (this.filterKey !== "") {
+                            console.log(
+                                this.products.filter(
+                                    (data) => data.expiryYear === this.filterKey
+                                )
+                            );
+                            return this.products.filter(
+                                (data) => data.expiryYear === this.filterKey
+                            );
+                        } else {
+                            return this.products;
+                        }
+                    },
                 },
                 template: `
                     <div class="container my-5">
+
                         <!-- add a search box and bind using v-model to filterKey -->
+                        <label
+                            class="col-form-label col-12 col-md-1"
+                            for="search"
+                        >
+                            Search
+                        </label>
+                        <input
+                            type="text"
+                            id="search"
+                            v-model="filterKey"
+                        />
+                        <!-- Available items -->
+                        <div class="py-3" v-if="filterKey === ''">
+                            <h3>Items available are: </h3>
+                            <hr/>
+                                <Table>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Expiry Year</th>
+                                    </tr>
+                                    <tr  v-for="product of products" :key="product.name">
+                                        <td class="mx-3">{{ product.name }}</td>
+                                        <td>{{ product.expiryYear }}</td>
+                                    </tr>
+                                </Table>
+                        </div>
+
                         <!-- Display filtered list items -->
+                        <div class="py-3" v-if="filterKey !== '' && filteredProducts.length >0">
+                            <h3>Filtered Items are: </h3>
+                            <hr/>
+                            <Table>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Expiry Year</th>
+                                </tr>
+                                <tr  v-for="product of filteredProducts" :key="product.name">
+                                    <td class="mx-3">{{ product.name }}</td>
+                                    <td>{{ product.expiryYear }}</td>
+                                </tr>
+                            </Table>
+                        </div>
                     </div>
                 `,
             });
