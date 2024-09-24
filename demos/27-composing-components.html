@@ -43,7 +43,7 @@
                 template: `
                     <div class="border border-dark">
                         using extra attributes when they are passed $attrs : {{ $attrs }}
-                        <faq-question :question="question"></faq-question>
+                        <faq-question :question="question" v-bind="$attrs"></faq-question>
                         <faq-answer :answer="answer"></faq-answer>
                     </div>
                 `,
