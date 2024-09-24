@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script> -->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script> -->
+
+        <!-- props validation is supported ONLY in the development build of Vue.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.common.dev.min.js"></script>
+
+        <script>
+            // Component Definition Object - it defines the component
+            const IconButton = {
+                props: {
+                    icon: {
+                        type: String,
+
+                        // called when the component renders first, and again whenever a new value is passed by parent component
+                        validator(value) {
+                            return ["😀", "😂", "😇"].includes(value);
+                        },
+                    },
+                    BtnText: {
+                        type: String,
+                    },
+                    label: {
+                        type: Number,
+                        default: 0, // this value is set if label prop is not passed
+                    },
+                },
+
+                // data (for component) MUST be a method even in Vue 2
+                // data() {
+                //     return {};
+                // },
+
+                template: `
+                    <button>
+                        {{ icon }} {{ BtnText }} {{ label }}
+                    </button>
+                `,
+                created() {
+                    console.log(this);
+                    console.log(this.icon, this.BtnText); // "this".prop (just like "this".data)
+                },
+            };
+
+            // kebab-case version of using components (icon-button instead of IconBtn)
+
+            Vue.component("IconBtn", IconButton);
+
+            new Vue({
+                el: "#app",
+                data() {
+                    return {
+                        // warning in console
+                        // smile: ["SMILE"],
+
+                        // no warning in console
+                        smile: "SMILE",
+                        // label: 2
+                    };
+                },
+                template: `
+                    <div class="container my-5">
+                        Vue 2
+
+                        <!-- Since we have used attribute binding (:label and not label, the value passed is number 1 and not string "1") -->
+
+                        <!-- This DOES NOT give a warning for label value (Number type for label) -->
+                        <IconBtn
+                            icon="😀"
+                            :btn-text="smile"
+                            :label="1"
+                        >
+                        </IconBtn>
+
+                        <!-- This gives a warning for label value (String type for label) -->
+                        <Icon-Btn
+                            icon="😂"
+                            btn-text="Laugh"
+                            label="3"
+                        ></Icon-Btn>
+
+                        <!-- icon validator check will fail -->
+                        <icon-btn :icon="😬" BtnText="Halo"></icon-btn>
+
+                        <!-- does not work -->
+                        <!-- <icOn-bTn icon="😇" text="Halo"></icOn-bTn> -->
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>

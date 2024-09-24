@@ -18,7 +18,7 @@
         <script>
             // Component Definition Object - it defines the component
             const IconButton = {
-                props: ["icon", "text"],
+                props: ["icon", "BtnText"],
 
                 // data (for component) MUST be a method even in Vue 2
                 // data() {
@@ -27,11 +27,11 @@
 
                 template: `
                     <button>
-                        {{ icon }} {{ text }}
+                        {{ icon }} {{ BtnText }}
                     </button>
                 `,
                 created() {
-                    console.log(this.icon, this.text); // "this".prop (just like "this".data)
+                    console.log(this.icon, this.BtnText); // "this".prop (just like "this".data)
                 },
             };
 
@@ -51,11 +51,11 @@
                         Vue 2
                         <IconBtn
                             icon="😀"
-                            :text="smile"
+                            :btn-text="smile"
                         >
                         </IconBtn>
-                        <Icon-Btn icon="😂" text="Laugh"></Icon-Btn>
-                        <icon-btn icon="😇" text="Halo"></icon-btn>
+                        <Icon-Btn icon="😂" btn-text="Laugh"></Icon-Btn>
+                        <icon-btn icon="😇" BtnText="Halo"></icon-btn>
 
                         <!-- does not work -->
                         <!-- <icOn-bTn icon="😇" text="Halo"></icOn-bTn> -->
