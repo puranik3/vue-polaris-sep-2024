@@ -1,14 +1,14 @@
 import axios from 'axios';
 
-const baseUrl = process.env.VUE_APP_BASE_URL;
+// const baseUrl = process.env.VUE_APP_BASE_URL;
 
-console.log(baseUrl);
+// console.log(baseUrl);
 
 // using fetch - we have not handled error using catch - whoever calls getWorkshops() will handle the error (if any)
 const getWorkshops = async (page = 1) => {
     try {
         const response = await axios.get(
-            `https://workshops-server.onrender.com/workshops`,
+            `/workshops`,
             {
                 params: {
                     _page: page,
@@ -22,6 +22,12 @@ const getWorkshops = async (page = 1) => {
     }
 };
 
+const getWorkshopById = async () => {
+
+};
+
+// named exports
 export {
-    getWorkshops
+    getWorkshops,
+    getWorkshopById
 };
