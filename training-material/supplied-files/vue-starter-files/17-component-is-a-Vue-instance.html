@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>A component instance is a Vue instance</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.min.js';
+
+            /**
+             * A component is a Vue subclass and it can be defined using Vue.extend() which returns a class. An instance of this class is a component instance.
+             * 
+             * Reference: https://v2.vuejs.org/v2/api/#Vue-extend - Create a "subclass" of the base Vue constructor. The argument should be an object containing component options.
+             * 
+             * Step 1: Create an instance and call its $mount() passing in '#app'. It renders! No "new Vue()" in this example!
+             */
+        </script>
+    </body>
+</html>

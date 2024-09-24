@@ -1,0 +1,15 @@
+<!--
+    The prop validations can do more than just simple type checking. They can
+    - specify is a prop is required
+    - specify default value
+    - do custom validation
+
+    Step 1: Copy the previous file and do these extra checks
+    - city is required (instead of type an object should be the value with 'type', and 'required' properties)
+    - rainfall should default to 0
+    - lastFiveDaysRainfall defaults to [] and a custom validator checks if every item is a number (set up using 'validator' method that receives the value)
+
+    Step 2: Also add the following new props (exercise)
+    - theme: Can be any of the Bootstrap themes (defaults to 'primary')
+    - toFarenheit: A method that is defined in the root instance and passed as a prop
+-->

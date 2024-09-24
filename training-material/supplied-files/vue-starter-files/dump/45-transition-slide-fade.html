@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Transition - slide-fade</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            .panel {
+                border: 1px solid #e0e0e0;
+                border-radius: 5px;
+            }
+
+            .panel-title,
+            .panel-content {
+                padding: 1em;
+            }
+
+            .panel-title {
+                background-color: #e0e0e0;
+                cursor: pointer;
+            }
+
+            /* Enter and leave animations can use different */
+            /* durations and timing functions. */
+            .slide-fade-enter-active {
+                transition: all .3s ease;
+            }
+
+            .slide-fade-leave-active {
+                transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+            }
+
+            .slide-fade-enter,
+            .slide-fade-leave-to
+            /* .slide-fade-leave-active below version 2.1.8 */ {
+                transform: translateX(10px);
+                opacity: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.js';
+            import Vuex from 'https://cdnjs.cloudflare.com/ajax/libs/vuex/3.6.2/vuex.esm.browser.js';
+
+            Vue.component("collapsible-panel", {
+                props:{
+                    title: String,
+                    content: String
+                },
+                data() {
+                    return {
+                        show: true
+                    }
+                },
+                methods: {
+                    toggle() {
+                        this.show = !this.show;
+                    }
+                },
+                template: `
+                    <div class="panel">
+                        <div class="panel-title" @click="toggle">{{title}}</div>
+                        <transition name="slide-fade">
+                            <div class="panel-content" v-if="show">{{content}}</div>
+                        </fade>
+                    </div>
+                `
+            });
+
+            new Vue({
+                el: '#root',
+                template: `
+                    <collapsible-panel
+                        title="What is Vue?"
+                        content="A library to build frontend SPAs"
+                    />
+                `
+            });
+        </script>
+    </body>
+</html>

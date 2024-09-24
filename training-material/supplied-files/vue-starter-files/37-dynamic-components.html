@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dynamic components - "is" attribute</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            .tab-button {
+                padding: 6px 10px;
+                border-top-left-radius: 3px;
+                border-top-right-radius: 3px;
+                border: 1px solid #ccc;
+                cursor: pointer;
+                background: #f0f0f0;
+                margin-bottom: -1px;
+                margin-right: -1px;
+            }
+
+            .tab-button:hover {
+                background: #e0e0e0;
+            }
+
+            .tab-button.active {
+                background: #e0e0e0;
+            }
+
+            .tab {
+                border: 1px solid #ccc;
+                padding: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.js";
+
+            /**
+             * A component may be chosen dynamically for rendering using <component :is="component-name" />
+             * This is useful when the chosen are not limited for what should take the place of component (eg. components for different kinds of advertisements on a web page).
+             *
+             * Step 1: Define 3 components with a simple template (a message will do), and register them globally
+             * - tab-home
+             * - tab-posts
+             * - tab-archive
+             *
+             * Step 2: In the root instances define as data
+             * {
+                    currentTab: "Home",
+                    tabs: ["Home", "Posts", "Archive"]
+               }
+             * The template consists of the tabs defined as buttons (iterate and show them). The button on click sets the currentTab. The current tab is given class 'active'
+             *
+             * Step 3: Add a <component :is="currentTabComponent" class="tab"> below the tabs. A computed currentTabComponent property sets the name of the current tab, and component shows it.
+             */
+
+            const AppMessage = {
+                name: "AppMessage",
+                template: `
+                    <div>Hello world</div>
+                `,
+            };
+
+            const AppInput = {
+                name: "AppInput",
+                template: `
+                    <input type="text" />
+                `,
+            };
+
+            Vue.component("AppMessage", AppMessage);
+            Vue.component("AppInput", AppInput);
+
+            new Vue({
+                el: "#app",
+                data: {
+                    componentToShow: "AppMessage",
+                },
+                template: `
+                    <div>
+                        <!-- 
+                            Dynamic component rendering can be used when there are too many kinds of components to show dynamically, or the component to show cannot be determined at compile (when writing code) by the parent component
+                            
+                            This can be helpful for example when showing Ads - each kind of Ad can be defined by a separate component, and  there many be many such Ad components
+                        -->
+                        <component :is="componentToShow" />
+                        <button @click="componentToShow = 'AppInput'">Change to input</button>
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>

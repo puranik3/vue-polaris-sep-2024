@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue Demo Template</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
+
+            const themeMixin = {
+                props: {
+                    theme: {
+                        type: String,
+                        default: 'primary',
+                        validator( value ) {
+                            return [
+                                'primary',
+                                'secondary',
+                                'info',
+                                'warning',
+                                'danger'
+                            ].includes( value );
+                        }
+                    }
+                }
+            }
+
+            const MyPanelHeading = {
+                mixins: [
+                    themeMixin
+                ],
+                props: {
+                    heading: {
+                        type: String,
+                        required: true
+                    }
+                },
+                template: `
+                    <div :class="'p-2 text-white bg-' + theme" @click="$emit( 'click' )">{{heading}}</div>
+                `
+            };
+            
+            const MyPanelBody = {
+                props: {
+                    isOpen: {
+                        type: Boolean,
+                        default: true
+                    }
+                },
+                template: `
+                    <div v-if="isOpen" class="panel-body p-2">
+                        <slot></slot>
+                    </div>
+                `
+            };
+
+            const MyPanel = {
+                mixins: [
+                    themeMixin
+                ],
+                components: {
+                    MyPanelHeading,
+                    MyPanelBody
+                },
+                props: {
+                    heading: {
+                        type: String,
+                        required: true
+                    }
+                },
+                data() {
+                    return {
+                        isOpen: true
+                    }
+                },
+                methods: {
+                    toggle() {
+                        this.isOpen = !this.isOpen
+                    }
+                },
+                template: `
+                    <div :class="'my-2 card border border-' + theme">
+                        <MyPanelHeading :heading="heading" :theme="theme" @click="toggle"  />
+                        <MyPanelBody :isOpen="isOpen">
+                            <slot></slot>
+                        </MyPanelBody>
+                    </div>
+                `
+            };
+
+            new Vue({
+                el: '#app',
+                components: {
+                    MyPanel
+                },
+                template: `
+                    <div class="m-5">
+                        <h1>Child-to-Parent Communication using custom events</h1>
+                        <hr />
+                        <div id="app">
+                            <MyPanel heading="What is Vue?">
+                                <p>It is a frontend library</p>
+                                <p>It is component-based and uses the Virtual DOM for efficient DOM manipulation</p>
+                            </MyPanel>
+                        </div>
+                    </div>
+                `
+            });
+        </script>
+    </body>
+</html>

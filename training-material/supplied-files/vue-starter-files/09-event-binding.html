@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Event binding</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            /**
+             * v-on directive helps set up event handling. Any methods, including event handlers, can be set up in "methods" property.
+             * 
+             * Step 1: Add a button next to the message. Set up a method which is called when the button is clicked. The method can be set up to be called either by
+             * 1. Providing the name of the method, or
+             * 2. Calling the method (any expression can be used as the value of the v-on directive).
+             * 
+             * Step 2: Add a method that toggles the message. Try both of the above ways.
+             * 
+             * Step 3: Since ANY EXPRESSION can be used as the value of v-on, try toggling the message inline WITHOUT using a method.
+             */
+
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.min.js';
+
+            new Vue(
+                {
+                    el: '#app',
+                    template: `
+                        
+                    `
+                }
+            );
+        </script>
+    </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue Demo Template</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            /**
+             * A non-prop attribute is an attribute that is passed to a component, but does not have a corresponding prop defined - components can accept arbitrary attributes, which are added to the component’s root element
+             * For example, the data-xyz="abc" attribute will automatically be added to the root element of Child (i.e. to <div class="child">)
+             * 
+             * NOTE: You can use inheritAttrs options along with $attrs component instance property to have further control over where the non-props attributes will be added. Further information can be found here - https://v2.vuejs.org/v2/guide/components-props.html#Disabling-Attribute-Inheritance
+             * 
+             * Step 1: Copy the previous file
+             * Step 2: Pass extra attributes like required and placeholder to BaseInput. Check that they are by default bound to the root element of this component.
+             * Step 3: Set inheritAttrs to false
+             * Step 4: Bind the input to $attrs
+             */
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.js';
+
+            const BaseInput = {
+                inheritAttrs: false,
+                props: ['label', 'value'],
+                template: `
+                    <label>
+                    {{ label }}
+                    <input
+                        v-bind="$attrs"
+                        v-bind:value="value"
+                        v-on:input="$emit('input', $event.target.value)"
+                    >
+                    </label>
+                `
+            };
+
+            new Vue({
+                el: '#app',
+                components: {
+                    BaseInput
+                },
+                template: `
+                    <div id="app">
+                        <base-input required="true" placeholder="Your name" /> 
+                    </div>
+                `
+            });
+        </script>
+    </body>
+</html>

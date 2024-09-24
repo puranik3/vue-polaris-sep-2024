@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Vue Demo Template</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import {
+                createApp,
+                reactive,
+                ref,
+                toRefs,
+                onMounted,
+                watch,
+            } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.esm-browser.min.js";
+
+            import axios from "https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.3/esm/axios.min.js";
+
+            const getWorkshops = async (page) => {
+                const response = await axios.get(
+                    `https://workshops-server.herokuapp.com/workshops`,
+                    {
+                        params: {
+                            _page: page, // https://workshops-server.herokuapp.com/workshops?_page=2
+                        },
+                    }
+                );
+                return response.data;
+            };
+
+            const useFetch = (fetchMethod, initialData) => {
+                const state = reactive({
+                    loading: true,
+                    data: initialData,
+                    error: null,
+                });
+
+                const fetchMethodRunner = async () => {
+                    state.loading = true;
+
+                    try {
+                        const data = await fetchMethod();
+                        state.data = data;
+                        console.log(data);
+                    } catch (error) {
+                        state.error = error;
+                    } finally {
+                        state.loading = false;
+                    }
+                };
+
+                onMounted(fetchMethodRunner);
+
+                return {
+                    state,
+                    fetchMethodRunner,
+                };
+            };
+
+            const useCounter = (initialValue) => {
+                // data (state)
+                const counter = ref(initialValue);
+
+                // methods
+                const decrement = () => {
+                    counter.value--;
+                };
+
+                const increment = () => {
+                    counter.value++;
+                };
+
+                return {
+                    counter,
+                    decrement,
+                    increment,
+                };
+            };
+
+            const AppCounter = {
+                name: "AppCounter",
+                setup() {
+                    const { counter, increment, decrement } = useCounter(0);
+                    return {
+                        counter,
+                        increment,
+                        decrement,
+                    };
+                },
+                template: `
+                    <div>
+                        <h2>Counter</h2>
+                        <hr />
+                        <button @click="decrement" class="btn btn-sm btn-primary">-</button>
+                        {{counter}}
+                        <button @click="increment" class="btn btn-sm btn-primary">+</button>
+                    </div>
+                `,
+            };
+
+            const WorkshopsList = {
+                name: "WorkshopsList",
+                setup() {
+                    const {
+                        counter: page,
+                        decrement: previous,
+                        increment: next,
+                    } = useCounter(1);
+
+                    // methods
+                    const fetchWorkshops = () => {
+                        return getWorkshops(page.value);
+                    };
+
+                    // add fetch on load feature to this component
+                    const { state, fetchMethodRunner } = useFetch(
+                        fetchWorkshops,
+                        []
+                    );
+                    const { loading, error, data: workshops } = toRefs(state);
+
+                    console.log(workshops.value);
+
+                    // watchers
+                    watch(page, () => {
+                        fetchMethodRunner();
+                    });
+
+                    return {
+                        loading,
+                        error,
+                        workshops,
+                        page,
+                        previous,
+                        next,
+                    };
+                },
+                template: `
+                    <div class="my-5">
+                        <h2>List of workshops</h2>
+                        <hr />
+                        <div>
+                            <button @click="previous" :disabled="loading" class="btn btn-sm btn-primary me-2">Previous</button>
+                            <button @click="next" :disabled="loading" class="btn btn-sm btn-primary">Next</button>
+                        </div>
+                        <div class="my-2">
+                            <strong>
+                                <div v-if="loading">
+                                    Loading page {{page}}
+                                </div>
+                                <div v-if="!loading && !error">
+                                    You are viewing page {{page}}
+                                </div>
+                            </strong>
+                        </div>
+                        <div v-if="loading" class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div v-else-if="error">
+                            <div class="alert alert-danger">{{error.message}}</div>
+                        </div>
+                        <div v-else class="row">
+                            <div
+                                v-for="workshop in workshops"
+                                :key="workshop.id"
+                                class="col-12 col-lg-4 my-3"
+                            >
+                                {{workshop.name}}
+                            </div>
+                        </div>
+                    </div>
+                `,
+            };
+
+            createApp({
+                el: "#app",
+                components: {
+                    AppCounter,
+                    WorkshopsList,
+                },
+                template: `
+                    <div class="container my-4">
+                        <app-counter />
+                        <workshops-list />
+                    </div>
+                `,
+            }).mount("#app");
+        </script>
+    </body>
+</html>

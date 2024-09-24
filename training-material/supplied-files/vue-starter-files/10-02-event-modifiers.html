@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>v-model for form inputs</title>
+        <style>
+            body {
+                width: 80%;
+                max-width: 1280px;
+                margin: 0 auto;
+                text-align: center;
+            }
+
+            .form-group {
+                margin: 1em 0;
+            }
+
+            .error {
+                font-size: 0.8em;
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
+
+             /*
+              * Event modifier helps implement common event-related logic easily - eg. preventing browser default action
+              * keyup.enter="handler" -> the handler is called only when the Enter key is pressed
+              * click.meta="handler" -> the handler is called only when the element is clicked while holding down the Meta key (Windows key / Command key on Mac)
+              * 
+              * Step 1: Setup data like so
+              * {
+                    credentials: {
+                        username: 'johndoe',
+                        password: ''
+                    }
+                }
+             * 
+             * Step 2: Setup a login form. Use v-model to bind the inputs to the properties in credentials. On submit it calls a login method. Use prevent modifier to prevent default action. 
+             * NOTE: In the v-on expression "$event" variable refers to the event object. If method name is mentioned in v-on then event object is passed to the method.
+             * 
+             * Step 3: Setup password to be validated on @keyup.enter (setup an appropriate method)
+             *
+             * Step 4: Understand the working of @click.meta by setting up a handler for button click
+             */
+             new Vue({
+                el: '#app',
+                data: {
+                    credentials: {
+                        username: 'johndoe',
+                        password: ''
+                    },
+                    passwordError: ''
+                },
+                methods: {
+                    login( event ) {
+                        console.log( 'to login' );
+                    },
+                    // EXERCISE: Check is password has at least 1 uppercase, 1 lowercase letter, and setup an appropriate error message if it is invalid
+                    validatePassword( event ) {
+                        const { password } = this.credentials;
+
+                        console.log( 'keyup event', event )
+                        // if( event.key === 'Enter' ) {
+                            console.log( 'need to validate' );
+
+                            if( !/[A-Z]/.test( password ) ) {
+                                this.passwordError = 'Must contain at least 1 uppercase letter';
+                                return;
+                            }
+
+                            if( !/[a-z]/.test( password ) ) {
+                                this.passwordError = 'Must contain at least 1 lowercase letter';
+                                return;
+                            }
+
+                            this.passwordError = '';
+                        // }
+                    },
+                    buttonClicked() {
+                        console.log( 'meta key pressed and mouse clicked' );
+                    }
+                },
+                template: `
+                    <form @submit.prevent="login( $event )">
+                        <div>
+                            <label for="username">Username</label>
+                            <input
+                                type="text"
+                                id="username"
+                                v-model="credentials.username"
+                            />
+                            {{credentials.username}}
+                        </div>
+                        <div>
+                            <label for="password">Password</label>
+                            <input
+                                type="password"
+                                id="password"
+                                v-model="credentials.password"
+                                @keyup.enter="validatePassword"
+                            />
+                            {{credentials.password}}
+                        </div>
+                        <div class="error">
+                            {{passwordError}}
+                        </div>
+                        <button type="submit" @click.meta="buttonClicked">Submit</button>
+                    </form>
+                `
+            })
+        </script>
+    </body>
+</html>

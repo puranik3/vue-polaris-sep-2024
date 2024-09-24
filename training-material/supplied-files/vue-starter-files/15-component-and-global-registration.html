@@ -1,0 +1,71 @@
+<!--
+    A component is a reusable, composable, customizable piece of the UI. It is defined using a configuration object, much like a Vue instance (in fact it is a Vue instance with small differences).
+
+    Step 1: Define a WelcomeMessage component using an configuration (an object) similar to the Vue root instance. Supply "data" (with "message") and a "template". Note that "data" MUST be a function that returns the data object. This is because components can have many instances, each one maintaining its own data.
+
+    Step 2: "Globally register" the component using Vue.component(), passing it the name of the component, and the component configuration. Once registered this way it can be used in any other component without extra steps. Note that the name is recommended to be in PascalCase with minimum 2 words or in kebab-case with minimum 2 words (so that its name does not conflict with native HTML elements).
+
+    Step 3: Create a Vue root instance and add "data" with a "message" here as well.
+
+    Step 4: Provide a template in the root instance, and bind the message from the root instance.
+    Also add 4 WelcomeMessage instances
+        - <WelcomeMessage />
+        - <WelcomeMessage></WelcomeMessage>
+        - <welcome-message />
+        - <welcome-message><welcome-message>
+    All of then render. Note that there is a different scope for each message variable.
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Component and Global registration</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.min.js';
+
+            const WelcomeMessage = {
+                data() {
+                    return {
+                        message: 'Hello component'
+                    };
+                },
+                methods: {
+                    changeMessage() {
+                        this.message = 'Hello component update';
+                    }
+                },
+                template: `
+                    <div @click="changeMessage">{{message}}</div>
+                `
+            };
+
+            // name can be PascalCase or kebab-case
+            Vue.component( 'WelcomeMessage', WelcomeMessage );
+
+            new Vue(
+                {
+                    el: '#app',
+                    data: {
+                        message: 'Hello root instance'
+                    },
+                    template: `
+                        <div>
+                            Message from root instance: {{message}}
+                            <WelcomeMessage></WelcomeMessage>
+                            <WelcomeMessage />
+                            <welcome-message></welcome-message>
+                            <welcome-message />
+                        </div>
+                    `
+                }
+            );
+        </script>
+    </body>
+</html>

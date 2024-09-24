@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Vue Demo Template</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.min.js";
+            import axios from "https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.3/esm/axios.min.js";
+
+            const getWorkshops = async (page) => {
+                const response = await axios.get(
+                    `https://workshops-server.herokuapp.com/workshops`,
+                    {
+                        params: {
+                            _page: page, // https://workshops-server.herokuapp.com/workshops?_page=2
+                        },
+                    }
+                );
+                return response.data;
+            };
+
+            const WorkshopsList = {
+                name: "WorkshopsList",
+                data() {
+                    return {
+                        loading: true,
+                        workshops: [],
+                        error: null,
+                        page: 1,
+                    };
+                },
+                // when you want to execute some logic in reaction to some state data change, that too have asynchronous tasks like API fetch, use a "watch" on that state data. The name of the watch should be SAME as the data property being watched.
+                // computed properties MUST return the computed value SYNCHRONOUSLY. They CANNOT execute asynchronous operation and set some value later.
+                watch: {
+                    page() {
+                        this.fetchWorkshops();
+                    },
+                },
+                methods: {
+                    previous() {
+                        this.page--;
+                    },
+                    next() {
+                        this.page++;
+                    },
+                    async fetchWorkshops() {
+                        try {
+                            const data = await getWorkshops(this.page);
+                            console.log(data);
+                            this.workshops = data;
+                        } catch (error) {
+                            this.error = error;
+                        } finally {
+                            this.loading = false;
+                        }
+                    },
+                },
+                template: `
+                    <div class="container my-4">
+                        <div v-if="loading" class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div v-else-if="error">
+                            <div class="alert alert-danger">{{error.message}}</div>
+                        </div>
+                        <div v-else class="row">
+                            <h1>List of workshops</h1>
+                            <hr />
+                            <div>
+                                <button @click="previous">Previous</button>
+                                <button @click="next">Next</button>
+                            </div>
+                            <div>
+                                You are viewing page {{page}}
+                            </div>
+                            <div
+                                v-for="workshop in workshops"
+                                :key="workshop.id"
+                                class="col-12 col-lg-4 my-3"
+                            >
+                                {{workshop.name}}
+                            </div>
+                        </div>
+                    </div>
+                `,
+                // first created() is called, then mounted() is called
+                created() {
+                    console.log(
+                        "this is called once data in this component becomes reactive (Vue starts observing it)"
+                    );
+                },
+                // as soon as the component shows on the browser, start this operation...
+                mounted() {
+                    this.fetchWorkshops();
+                },
+            };
+
+            new Vue({
+                el: "#app",
+                components: {
+                    WorkshopsList,
+                },
+                template: `
+                    <WorkshopsList />
+                `,
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Vue Demo Template</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            /**
+             * v-model can be implemented to work on custom inputs as well
+             *
+             * Refer https://v2.vuejs.org/v2/guide/components.html#Using-v-model-on-Components to implement one
+             */
+            import Vue from "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
+
+            const BaseInput = {
+                inheritAttrs: false,
+                props: ["label"],
+                template: `
+                    <label>
+                    {{ label }}
+                    <input
+                        :value="$attrs.value"
+                        v-bind="$attrs"
+                        v-on:input="$emit('input', $event.target.value)"
+                    >
+                    </label>
+                `,
+            };
+
+            new Vue({
+                el: "#app",
+                components: {
+                    BaseInput,
+                },
+                data: {
+                    name: "John Doe",
+                },
+                template: `
+                    <div id="app">
+                        <base-input
+                            label="Your name"
+                            required="true"
+                            placeholder="Your name"
+                            v-model="name"
+                        /> 
+                        {{name}}
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>

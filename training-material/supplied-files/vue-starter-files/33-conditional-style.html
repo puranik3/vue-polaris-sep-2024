@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Conditional inline styles</title>
+        <style>
+            
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            /**
+             * When you have to apply inline styling conditionally, we can create a computed property that returns the conditional style, and use it on the element
+             * Hard-coded style (style), and conditional style (:style) can be used together
+             */
+
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
+
+            /**
+             * Step 4: Define objects successColor (border), successBgColor (background-color), errorColor, errorBgColor. This is something similar to defining CSS classes - uses camelCase instead of kebab-case for CSS properties
+             */
+            
+            new Vue({
+                el: '#root',
+                data: {
+                    status: 'success',
+                    message: 'The email was sent'
+                },
+                // Step 3: Define a computed property alertStyle that does the same as Step 1. Using computed properties is more efficient than methods when applying styling conditionally.
+                // Step 5: Return an object with CSS property vs value. Use object spread to form the object by combining objects above.
+                
+                // Step 1: Provide a method alertStyle() that returns a string with the conditional CSS (border-color and background-color). Call it in the template to apply the CSS conditionally.
+                methods: {
+                    setMessage( message, status ) {
+                        this.message = message;
+                        this.status = status;
+                    },
+                },
+                template: `
+                    <div>
+                        <!--
+                            Step 2: Apply border-radius, border-width, border-style, and padding unconditionally. Apply alertyStyle conditionally.
+                        -->
+                        <div>
+                            {{message}}
+                        </div>
+                        <button
+                            @click="setMessage( 'Email could not be sent', 'error' )"
+                        >
+                            Show error
+                        </button>
+                    </div>
+                `
+            });
+        </script>
+    </body>
+</html>

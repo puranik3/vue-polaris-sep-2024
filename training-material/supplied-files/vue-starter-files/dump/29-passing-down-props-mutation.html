@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue Demo Template</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
+
+            /**
+             * When the parent property updates, it will flow down to the child, but not the other way around. However, objects are passed by reference, and hence updates in child affect the parent.
+             * Every time the parent component is updated, all props in the child component will be refreshed with the latest value - you should not attempt to mutate a prop inside a child component.
+             */
+            const ChildComponent = {
+                props: [ 'counter', 'obj' ],
+                methods: {
+                    increment() {
+                        this.counter++;
+                    }
+                },
+                template: `
+                    <div class="my-3 p-3 border border-secondary">
+                        <h2>Child</h2>
+                        <div>
+                            Counter: {{counter}}
+                            <button @click="increment">+</button>
+                        </div>
+                        <div>
+                            Framework: {{obj.name}}
+                            <input type="text" v-model="obj.name" />
+                        </div>
+                    </div>
+                `
+            };
+            
+            const ParentComponent = {
+                components: {
+                    ChildComponent
+                },
+                data() {
+                    return {
+                        counter: 1,
+                        obj: {
+                            name: 'Vue'
+                        }
+                    };
+                },
+                methods: {
+                    increment() {
+                        this.counter++;
+                    }
+                },
+                watch: {
+                    obj( newVal, oldVal ) {
+                        console.log( 'watch obj' )
+                        this.currentObj = {
+                            ...this.obj
+                        };
+                    },
+                    counter( newVal, oldVal ) {
+                        console.log( 'watch counter' )
+                    }
+                },
+                mounted() {
+                    console.log( 'mounted' );
+                },
+                beforeUpdate() {
+                    console.log( 'beforeUpdate' );
+                },
+                updated() {
+                    console.log( 'updated' );
+                },
+                template: `
+                    <div class="container my-3 p-3 border border-secondary">
+                        <h1>Parent</h1>
+                        <div>
+                            <div>
+                                Counter: {{counter}}
+                                <button @click="increment">+</button>
+                            </div>
+                            <div>
+                                Framework: {{obj.name}}
+                                <input type="text" v-model="obj.name" />
+                            </div>
+                        </div>
+                        <ChildComponent :counter="counter" :obj="obj" />
+                    </div>
+                `
+            };
+
+            new Vue({
+                el: '#app',
+                components: {
+                    ParentComponent
+                },
+                template: `
+                    <div id="app">
+                        <ParentComponent />
+                    </div>
+                `
+            });
+        </script>
+    </body>
+</html>

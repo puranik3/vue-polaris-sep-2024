@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>v-for for list iteration</title>
+        <style>
+            .locations > li {
+                margin-top: 0.5em;
+                margin-bottom: 0.5em;
+            }
+
+            .area {
+                display: inline-block;
+                padding: 0.3em;
+                border-radius: 4px;
+                margin-right: 10px;
+                background-color: navy;
+                color: ivory;
+                font-size: 0.8em;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
+
+            /**
+             * EXERCISE: Use v-for to construct a dropdown with cities in the options. The value and display text of every option to the city's name.
+             * 
+             * cities: [
+                    { name: 'Bengaluru', num: 50, areas: [ 'Koramangala', 'Whitefield' ] },
+                    { name: 'Chennai', num: 100, areas: [ 'Tidel Park' ] },
+                    { name: 'Mumbai', num: 500, selected: true, areas: [ 'Bandra', 'Nariman Point' ] },
+                    { name: 'Hyderabad', num: 250, areas: [ 'Hitec City', 'SEZ' ] }
+               ]
+             *
+             * Step 1: Use v-for to show the cities, and areas.
+             * 
+             * Step 2: Add an dropdown with cities. Show the selected city's option by default. Tie it up to preferredLocation.
+             * Step 3: Add location data with input fields for city name and number of employees tied up. On submit of this form it adds a location to the list of locations. Try different ways to add the data to the array.
+             * 
+             * Step 4: Add a button for ach location displayed that helps delete the location. Try different ways to delete the data from the array.
+             */
+            new Vue({
+                el: '#root',
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>The "is" attribute</title>
+    </head>
+    <body>
+        <div id="root">
+            <!-- does not render properly -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Completed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <TodoListItem
+                        v-for="todo in todos"
+                        v-bind:key="todo.id"
+                        v-bind:todo="todo"
+                    >
+                    </TodoListItem>
+                </tbody>
+            </table>
+
+            <!-- renders fine -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Completed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        is="TodoListItem"
+                        v-for="todo in todos"
+                        v-bind:key="todo.id"
+                        v-bind:todo="todo"
+                    ></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <script type="module">
+            /**
+             * only a tr can be a child of tbody/table, only li can be a child of ul/ol etc. This leads to eviction of any other elements within table / ul / ol etc.
+             *
+             * This is a limitation of only DOM templating and NOT template string (template property in component), single-file i.e. *.vue file templates.
+             *
+             * The "is" attribute helps in such scenarios.
+             */
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.js";
+
+            const TodoListItem = {
+                name: "TodoListItem",
+                props: ["todo"],
+                template: `
+                    <tr>
+                        <td>{{todo.text}}</td>
+                        <td>{{todo.done ? 'YES' : 'NO'}}</td>
+                    </tr>
+                `,
+            };
+
+            new Vue({
+                el: "#root",
+                components: {
+                    TodoListItem,
+                },
+                data: {
+                    todos: [
+                        { id: 1, text: "Apply for leave", done: true },
+                        { id: 2, text: "Plan vacation", done: false },
+                        { id: 3, text: "Learn Vue", done: true },
+                    ],
+                },
+            });
+        </script>
+    </body>
+</html>

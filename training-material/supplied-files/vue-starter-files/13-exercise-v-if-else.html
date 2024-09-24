@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+        <title>v-if, v-else-if, v-else</title>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.min.js';
+
+            /**
+             * Add 3 buttons to shift to Free / Premium / Pro
+             * Add a single method to do so. Pass an argument to that method which is the plan name.
+             * Display only the buttons for the "other" 2 plans
+             */
+            const vm = new Vue({
+                el: '#app',
+                data: {
+                    plan: 'Free' // can be 'Premium' | 'Pro'
+                },
+                methods: {
+                    changePlan( plan ) {
+                        this.plan = plan;
+                    }
+                },
+                /**
+                 * Step 1: Display the features available in every plan as per chosen plan (use v-if, v-else-if, v-else)
+                 * Free: You can create unlimited number of public repos
+                 * Premium: You can create unlimited number of private repos. Maximum 3 collaborators per repo.
+                 * Pro: You can create unlimited number of private repos. No limit on collaborators.
+                 */
+                /**
+                 * Step 2: Add method / methods to switch to desired plans. Add 3 buttons to do the switch. Only buttons of 2 other plans (other than the chosen plan need to be shown)
+                 */
+                template: `
+                    <div class="container my-4">
+                        <button
+                            v-if="plan !== 'Free'"
+                            class="btn btn-primary me-2"
+                            @click="changePlan( 'Free' )"
+                        >
+                            Switch to Free
+                        </button>
+                        <button
+                            v-if="plan !== 'Pro'"
+                            class="btn btn-primary me-2"
+                            @click="changePlan( 'Pro' )"
+                        >
+                            Switch to Pro
+                        </button>
+                        <button
+                            v-if="plan !== 'Premium'"
+                            class="btn btn-primary me-2"
+                            @click="changePlan( 'Premium' )"
+                        >
+                            Switch to Premium
+                        </button>
+
+                        <div v-if="plan === 'Free'">
+                            Free: You can create unlimited number of public repos
+                        </div>
+                        <div v-else-if="plan === 'Premium'">
+                            Premium: You can create unlimited number of private repos. Maximum 3 collaborators per repo.
+                        </div>
+                        <div v-else>
+                            Pro: You can create unlimited number of private repos. No limit on collaborators.
+                        </div>
+                    </div>
+                `
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,6 @@
+<!--
+    "Local registration" of components is preferred when compared to "global registration". It makes it easy to track dependencies in a large project, and also enables "tree-shaking" of dependencies by Webpack (elimination of components that are defined but never used).
+
+    Step 1: Copy the previous file (with template string of the root app using the WelcomeMessage component).
+    Step 2: Remove the Vue.component() call. Instead add "components" property to the root Vue instance that uses WelcomeMessage. It has properties referring to the component configurations.
+-->

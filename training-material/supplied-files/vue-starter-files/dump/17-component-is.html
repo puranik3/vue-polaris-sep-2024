@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue Demo Template</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
+
+            const ListGroupItem = {
+                props: [
+                    'city'
+                ],
+                template: `
+                    <li class="list-group-item">{{city}}</li>
+                `
+            };
+
+            new Vue({
+                components: {
+                    ListGroupItem
+                },
+                data: {
+                    cities: [
+                        'San Jose',
+                        'San Francisco'
+                    ]
+                },
+                el: '#app',
+                template: `
+                    <div class="mx-5 my-5">
+                        <h1>Cities</h1>
+                        <hr />
+                        <ul id="app" class="list-group">
+                            <li
+                                is="list-group-item"
+                                v-for="city of cities"
+                                :city="city"
+                                :key="city">
+                            </li>
+                        </ul>
+                    </div>
+                `
+            });
+        </script>
+    </body>
+</html>

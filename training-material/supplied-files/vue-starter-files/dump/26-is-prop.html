@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue Demo Template</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="app">
+            <!-- Check Step 3 -->
+        </div>
+
+        <script type="module">
+            /**
+             * only a tr can be a child of tbody/table, only li can be a child of ul/ol etc. This leads to eviction of any other elements within table / ul / ol etc.
+             * 
+             * This is a limitation of only DOM templating and NOT template string (template property in component), singl-file i.e. *.vue file templates.
+             * 
+             * The "is" attribute helps in such scenarios.
+             * 
+             * Step 1: Define a TodoListItem component which renders details of a todo item in a table row. It takes a "todo" object as a prop and renders it as a table row. A todo is an object that looks like so
+             * { id: 1, text: 'Apply for leave', done: true }
+             * 
+             * Step 2: Define a root instance with data like so. It shall use the todoListItem (which is registered locally). DO NOT define the template as a string.
+             * [
+                    { id: 1, text: 'Apply for leave', done: true },
+                    { id: 2, text: 'Plan vacation', done: false },
+                    { id: 3, text: 'Learn Vue', done: true },
+                ]
+             * 
+             * Step 3: In the DOM template render 2 tables with TododListItem instances rendered using v-for.
+             * - In one table render using <TodoListItem /> (passing in props)
+             * - In another table render using <tr is="TodoListItem"></tr>
+             * 
+             * The first table does not render, while the second does.
+             */
+
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.min.js';
+
+            new Vue(
+                {
+                    el: '#app',
+                }
+            );
+        </script>
+    </body>
+</html>

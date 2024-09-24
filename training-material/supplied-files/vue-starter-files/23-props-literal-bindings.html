@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Props - Literals binding</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            /**
+             * The property binding in case of number data type prop ensures the value is treated as a JS expression, i.e. in this case a number literal
+             * 
+             * Step 1: Since min, max, rainfall are to be treated as numbers in the WeatherReport component, use :attr instead to bind them. Truly speaking the value when bound this way will be treated as a JavaScript expression, consequently numbers in this case. Note that this is not required ONLY for strings (eg. the city prop).
+             * 
+             * Any expressions including function calls can be made while binding data
+             * 
+             * Step 2: Use an expression created using Array map() and join to display the rainfall information in lastFiveDaysRainfall with 'mm' as units, and the rainfall data separated by commas.
+             */
+            const WeatherReport = {
+                props: [
+                    'city',
+                    'min',
+                    'max',
+                    'rainfall',
+                    'lastFiveDaysRainfall'
+                ],
+                template: `
+                    <div class="card p-4 my-3">
+                        <h2>{{city}}</h2>
+                        <p>
+                            Min: {{min}} °C
+                            <br />
+                            Max: {{max}} °C
+                        </p>
+                        <div class="alert alert-primary p-4">
+                            <h3>Rainfall</h3>
+                            <p>
+                                Today: {{rainfall}} mm
+                            </p>
+                            <div>
+                                Last 5 days rainfall: {{lastFiveDaysRainfall}}
+                            </div>
+                        </div>
+                    </div>
+                `
+            };
+
+            new Vue({
+                components: {
+                    WeatherReport
+                },
+                el: '#app',
+                template: `
+                    <div id="app" class="container my-5">
+                        <WeatherReport
+                            city="San Jose"
+                            min="15"
+                            max="30"
+                            rainfall="12"
+                            :lastFiveDaysRainfall="[ 20, 15, 10, 5, 0 ]"
+                            />
+                        <WeatherReport
+                            city="San Francisco"
+                            min="7"
+                            max="21"
+                            rainfall="15"
+                            :lastFiveDaysRainfall="[ 25, 20, 15, 10, 5 ]"
+                            />
+                    </div>
+                `
+            });
+        </script>
+    </body>
+</html>

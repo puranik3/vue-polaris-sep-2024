@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Slots - customizing list items</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            /**
+             * Slots allow customization of part of children by parent - this can even be a list item rendered by a loop!
+             * (I guess) Vue takes care of the fact that name of the slot repeats in the loop
+             */
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.js';
+
+            // Create a TodoList component to render the todos (Accept todos as prop) with each li having the name and slot props as todo - <slot name="todo" :todo="todo">. The slot default is to have the todo text
+            
+            /**
+             * Render TodoList passing
+             * {
+                    todos: [
+                        { id: 1, text: 'Apply for leave', done: true },
+                        { id: 2, text: 'Plan vacation', done: false },
+                        { id: 3, text: 'Learn Vue', done: true },
+                    ]
+                }
+             * Pass in custom content for the list item in a template within the <TodoList></TodoList>
+             */
+        </script>
+    </body>
+</html>

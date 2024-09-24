@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue Demo Template</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.min.js';
+
+            /**
+             * When the parent property updates, it will flow down to the child, but not the other way around. However, objects are passed by reference, and hence updates in child affect the parent.
+             * Every time the parent component is updated, all props in the child component will be refreshed with the latest value - you should not attempt to mutate a prop inside a child component.
+             */
+
+            // Step 3: Define ChildComponent which accepts the props passed. It has its own increment method to increment counter prop. Define a template with counter + increment button. and bound input + displayed obj.name.
+            
+            const ParentComponent = {
+                // Step 4: Register ChildComponent
+
+                data() {
+                    return {
+                        counter: 1,
+                        obj: {
+                            name: 'Vue'
+                        }
+                    };
+                },
+                // Step 1: Method to increment counter
+                // Step 2: Have counter displayed calling the method to increment it
+                // Step 3: Have an input bound to obj.name. Bind obj.value in the template as well to see changes.
+                // Step 5: Render ChildComponent in the template, passing counter and obj
+            };
+
+            new Vue({
+                el: '#app',
+                components: {
+                    ParentComponent
+                },
+                template: `
+                    <div id="app">
+                        <ParentComponent />
+                    </div>
+                `
+            });
+        </script>
+    </body>
+</html>

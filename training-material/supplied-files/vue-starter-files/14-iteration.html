@@ -1,0 +1,100 @@
+<!--
+    Step 1: Copy the previous file. In the root instance, set this data and use v-for to show WeatherReport instances.
+    
+
+    Step 2: Within WeatherReport, use v-for to show the last 5 days rainfall information.
+
+    Make sure to set the key prop (BEST PRACTICE)!
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue Demo Template</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.min.js';
+
+            // Let's say after some time data has 3 cities - we have 1. 'New York', 2. 'San Jose', 3. 'San Francisco'
+            const weatherReportData = [
+                {
+                    id: 1,
+                    city : "San Jose",
+                    min : 15,
+                    max : 30,
+                    rainfall : 12,
+                    lastFiveDaysRainfall : [ 20, 15, 10, 5, 0 ]
+                },
+                {
+                    id: 2,
+                    city : "San Francisco",
+                    min : 7,
+                    max : 21,
+                    rainfall : 15,
+                    lastFiveDaysRainfall : [ 25, 20, 15, 10, 5 ]
+                }
+            ];
+
+            new Vue(
+                {
+                    el: '#app',
+                    data: {
+                        // weatherReportData: weatherReportData
+                        weatherReportData
+                    },
+                    template: `
+                        <div class="container my-5">
+                            <h1>Weather for various cities</h1>
+                            <hr />
+                            <div class="row">
+                                <div
+                                    class="col" 
+                                    v-for="( { id, city, min, max, lastFiveDaysRainfall, rainfall }, index ) in weatherReportData"
+                                    :key="id"
+                                >
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{city}}</h5>
+                                            <div class="card-text">
+                                                <div>
+                                                    {{index}}.
+                                                    Minimum: {{min}} °C
+                                                    |
+                                                    Maximum: {{max}} °C
+                                                </div>
+                                                <div class="alert alert-primary">
+                                                    <div>
+                                                        Rainfall: {{rainfall}} mm
+                                                    </div>
+                                                    
+                                                    <!--
+                                                        EXERCISE: Display last 5 days rainfall each in a list item
+                                                    -->
+                                                    <div v-if="lastFiveDaysRainfall.length !== 0">
+                                                        Last 5 days:
+                                                        <ul>
+                                                            <li v-for="( r, index ) in lastFiveDaysRainfall" :key="index">{{r}} mm</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div v-else>
+                                                        Last 5 days rainfall info is not available
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                }
+            );
+        </script>
+    </body>
+</html>

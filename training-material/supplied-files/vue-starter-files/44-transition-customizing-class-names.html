@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Transition - customizing class names</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            .panel {
+                border: 1px solid #e0e0e0;
+                border-radius: 5px;
+            }
+
+            .panel-title,
+            .panel-content {
+                padding: 1em;
+            }
+
+            .panel-title {
+                background-color: #e0e0e0;
+                cursor: pointer;
+            }
+
+            /* .hide is not used in this demo */
+            .hide {
+                height: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+                transition: 200ms;
+                overflow: hidden;
+            }
+
+            /* Step 1: Change class name to what you want */
+            .fade-enter-active,
+            .fade-leave-active {
+                transition: opacity 5s;
+            }
+
+            .fade-enter,
+            .fade-leave-to {
+                opacity: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            /**
+             * These will override the conventional class names. This is especially useful when you want to combine Vue’s transition system with an existing CSS animation library, such as Animate.css.
+             */
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.js";
+            import Vuex from "https://cdnjs.cloudflare.com/ajax/libs/vuex/3.6.2/vuex.esm.browser.js";
+
+            Vue.component("collapsible-panel", {
+                props: {
+                    title: String,
+                    content: String,
+                },
+                data() {
+                    return {
+                        show: true,
+                    };
+                },
+                methods: {
+                    toggle() {
+                        this.show = !this.show;
+                    },
+                },
+                template: `
+                    <div class="panel">
+                        <div class="panel-title" @click="toggle">{{title}}</div>
+                        <!-- Apply CSS classes with customized names -->
+                        <transition name="fade">
+                            <div class="panel-content" v-if="show">{{content}}</div>
+                        </transition>
+                    </div>
+                `,
+            });
+
+            new Vue({
+                el: "#root",
+                template: `
+                    <collapsible-panel
+                        title="What is Vue?"
+                        content="A library to build frontend SPAs"
+                    />
+                `,
+            });
+        </script>
+    </body>
+</html>

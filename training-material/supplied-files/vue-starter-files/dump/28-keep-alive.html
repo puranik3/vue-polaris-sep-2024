@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dynamic components - keep-alive</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            .tab-button {
+                padding: 6px 10px;
+                border-top-left-radius: 3px;
+                border-top-right-radius: 3px;
+                border: 1px solid #ccc;
+                cursor: pointer;
+                background: #f0f0f0;
+                margin-bottom: -1px;
+                margin-right: -1px;
+            }
+            .tab-button:hover {
+                background: #e0e0e0;
+            }
+            .tab-button.active {
+                background: #e0e0e0;
+            }
+            .tab {
+                border: 1px solid #ccc;
+                padding: 10px;
+            }
+
+            .panel {
+                border: 1px solid #e0e0e0;
+                border-radius: 5px;
+            }
+
+            .panel-title,
+            .panel-content {
+                padding: 1em;
+            }
+
+            .panel-title {
+                background-color: #e0e0e0;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.js';
+
+            /**
+             * Component instances are created when they come into view and destroyed when they go out of view. Sometimes this is undesirable as some state may be lost (eg. chosen panel item, filled out form data etc.). In such cases enclosing them in <keep-alive></keep-alive> helps cache those instances and they are not recreated when the go out and come back into view.
+             *
+             * Step 1: Copy the previous file. Define a collapsible panel component (It has title and content areas (the HTML content for both is received as props). The content opens and closes when the title is clicked). Set the CSS classes (already defined).
+             * 
+             * Step 2: Render panels in tab-posts component with the following data. In an actual app this may have been received as props by the tab-posts or fetched from the backend.
+             * {
+                    posts: [
+                        {
+                            id: 1,
+                            title: 'What is Vue?',
+                            content: 'A library to build frontend SPAs'
+                        },
+                        {
+                            id: 2,
+                            title: 'What is Vue router?',
+                            content: 'A routing library used with Vue JS'
+                        },
+                        {
+                            id: 3,
+                            title: 'What is Vuex?',
+                            content: 'A state-management library used with Vue JS'
+                        }
+                    ]
+               }
+             * 
+             * Step 3: Switch between tabs, select some panel in tab-posts, visit some other tab, and revisit the tab-posts. You can see the selected panel information is lost as the panels are recreated.
+             * 
+             * Step 4: Now add the dynamic component in <keep-alive> and repeat Step 3. You will see the state preserved as the tab-posts is not recreated (and thus panels also not recreated).
+             * <keep-alive>
+             *     <component ...>
+             * </keep-alive>
+             */
+        </script>
+    </body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Transition - fade</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            .panel {
+                border: 1px solid #e0e0e0;
+                border-radius: 5px;
+            }
+
+            .panel-title,
+            .panel-content {
+                padding: 1em;
+            }
+
+            .panel-title {
+                background-color: #e0e0e0;
+                cursor: pointer;
+            }
+
+            /* Step 2: Add *-enter-active, *-leave-active for transition duration of opacity */
+
+            /* Step 2: Add *-enter, *-leave-to (*-leave-active below version 2.1.8) for initial state on enter and final state on leave to be hidden (opacity: 0)*/
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.js";
+            import Vuex from "https://cdnjs.cloudflare.com/ajax/libs/vuex/3.6.2/vuex.esm.browser.js";
+
+            Vue.component("collapsible-panel", {
+                props: {
+                    title: String,
+                    content: String,
+                },
+                data() {
+                    return {
+                        show: true,
+                    };
+                },
+                methods: {
+                    toggle() {
+                        this.show = !this.show;
+                    },
+                },
+                template: `
+                    <div class="panel">
+                        <div class="panel-title" @click="toggle">{{title}}</div>
+                        <!-- Step 1: Add transition with name -->
+                        <div class="panel-content" v-if="show">{{content}}</div>
+                    </div>
+                `,
+            });
+
+            new Vue({
+                el: "#root",
+                template: `
+                    <collapsible-panel
+                        title="What is Vue?"
+                        content="A library to build frontend SPAs"
+                    />
+                `,
+            });
+        </script>
+    </body>
+</html>

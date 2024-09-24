@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Props</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="app">
+            <!-- Check Step 4 -->
+        </div>
+
+        <script type="module">
+            /**
+             * Props are used to customize component instances. They are inputs from outside of the component (from where the instance is rendered).
+             * 
+             * Step 1: Define a WeatherReport component configuration. Add "props" as the following array listing all the possible props.
+             * [
+                    'city',
+                    'min',
+                    'max',
+                    'rainfall',
+                    'lastFiveDaysRainfall',
+                    'theme'
+                ]
+             * 
+             * Step 2: Define a template displaying weather info in a card layout. Use the "theme" prop to display rainfall info in a division (the theme value can be 'primary'/'secondary' or any of the Bootstrap theme variants) by binding class attribute. Try to interpolate the array "lastFiveDaysRainfall" prop. See what happens.
+             * 
+             * Step 3: In the root instance register the component and render 2 instances of it in a template string, passing values for 2 cities. Set the values inline (no need for data in the root instance)
+             * 
+             * Step 4: Remove the template string and render the HTML in the DOM. You will need to use kebab-case versions of both component name and attributes (weather-report, last-five-days-rainfall)
+             */
+
+            import Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.min.js';
+
+            new Vue(
+                {
+                    el: '#app'
+                }
+            );
+        </script>
+    </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Conditional CSS classes</title>
+        <!--
+            Step 1: Define alert, alert-success, alert-error CSS classes
+        -->
+    </head>
+    <body>
+        <div id="root"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.10/vue.esm.browser.min.js";
+
+            /**
+             * When you have to apply classes conditionally, we can create a computed property that returns the conditional class, and use it on the element
+             * Hard-coded classes (class), and conditional classes (:class) can be used together
+             */
+            new Vue({
+                el: '#root',
+                data: {
+                    status: 'success',
+                    message: 'The email was sent'
+                },
+                // Step 2: Define computed property alertClass that evaluates to the class go be applied conditionally
+                methods: {
+                    setMessage( message, status ) {
+                        this.message = message;
+                        this.status = status;
+                    }
+                },
+                // Apply the alert class unconditionally, and the status specific class conditionally
+                template: `
+                    <div>
+                        <div>
+                            {{message}}
+                        </div>
+                        <button
+                            @click="setMessage( 'Email could not be sent', 'error' )"
+                        >
+                            Show error
+                        </button>
+                    </div>
+                `
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,60 @@
+<!--
+    Step 1: Copy the last file implementing WeatherReport component. If lastFiveDaysRainfall is not passed it assumes [] as its value. Use v-if and v-else to show the data if available, and a meaningful message if it is not.
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Vue Demo Template</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script type="module">
+            import Vue from "https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.esm.browser.min.js";
+
+            new Vue({
+                el: "#app",
+                data: {
+                    city: "Hyderabad",
+                    rainfall: 5,
+                    min: 24,
+                    max: 35,
+                    lastFiveDaysRainfall: [],
+                },
+                template: `
+                        <div class="card" style="width:18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{city}}</h5>
+                                <div class="card-text">
+                                    <div>
+                                        Minimum: {{min}} °C
+                                        |
+                                        Maximum: {{max}} °C
+                                    </div>
+                                    <div class="alert alert-primary">
+                                        <div>
+                                            Rainfall: {{rainfall}} mm
+                                        </div>
+                                        <!-- You also have v-else-if="" -->
+                                        <div v-show="lastFiveDaysRainfall.length !== 0">
+                                            Last 5 days: {{lastFiveDaysRainfall}}
+                                        </div>
+                                        <div v-show="lastFiveDaysRainfall.length === 0">
+                                            Last 5 days rainfall info is not available
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+            });
+        </script>
+    </body>
+</html>
