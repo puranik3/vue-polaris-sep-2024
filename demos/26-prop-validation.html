@@ -21,9 +21,11 @@
         <script>
             // Component Definition Object - it defines the component
             const IconButton = {
+                // default and required are alternatives - only one is mentioned
                 props: {
                     icon: {
                         type: String,
+                        required: true,
 
                         // called when the component renders first, and again whenever a new value is passed by parent component
                         validator(value) {
@@ -85,6 +87,12 @@
                         >
                         </IconBtn>
 
+                        <IconBtn
+                            :btn-text="smile"
+                            :label="1"
+                        >
+                        </IconBtn>
+
                         <!-- This gives a warning for label value (String type for label) -->
                         <Icon-Btn
                             icon="😂"
@@ -93,7 +101,7 @@
                         ></Icon-Btn>
 
                         <!-- icon validator check will fail -->
-                        <icon-btn :icon="😬" BtnText="Halo"></icon-btn>
+                        <icon-btn icon="😬" BtnText="Halo"></icon-btn>
 
                         <!-- does not work -->
                         <!-- <icOn-bTn icon="😇" text="Halo"></icOn-bTn> -->
