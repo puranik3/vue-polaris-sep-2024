@@ -5,8 +5,13 @@
 </template>
 
 <script>
+import { getWorkshops } from '@/services/workshops';
+
 export default {
-    name: 'AppWorkshopsList'
+    name: 'AppWorkshopsList',
+    mounted() {
+        getWorkshops();
+    }
 }
 </script>
 
