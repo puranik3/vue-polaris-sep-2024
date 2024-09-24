@@ -4,6 +4,7 @@ import AppWorkshopsList from './components/views/WorkshopsList.vue';
 
 const router = new Router({
     mode: 'history',
+    linkActiveClass: 'active',
     routes: [
         {
             path: '/',

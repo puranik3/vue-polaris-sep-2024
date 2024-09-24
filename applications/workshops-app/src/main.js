@@ -13,12 +13,12 @@ Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
 
-// ad routing functionality
+// add routing functionality
 Vue.use(VueRouter);
 
 Vue.config.productionTip = false;
 
 new Vue({
-  router,
+  router, // add the router with routes configuration
   render: h => h(App),
 }).$mount('#app')
