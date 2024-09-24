@@ -1,5 +1,24 @@
 <template>
-    <div>Menu component works!</div>
+    <div>
+        <b-navbar toggleable="lg" type="dark" variant="info">
+            <b-navbar-brand href="/">Workshops App</b-navbar-brand>
+
+            <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+            <b-collapse id="nav-collapse" is-nav>
+                <b-navbar-nav>
+                    <b-nav-item href="/">Home</b-nav-item>
+                    <b-nav-item href="/workshops">List of Workshops</b-nav-item>
+                </b-navbar-nav>
+
+                <!-- Right aligned nav items -->
+                <b-navbar-nav class="ml-auto">
+                    <b-nav-item href="#">Change theme</b-nav-item>
+                    <b-nav-item href="/login">Login</b-nav-item>
+                </b-navbar-nav>
+            </b-collapse>
+        </b-navbar>
+    </div>
 </template>
 
 <script lang="js">
@@ -8,4 +27,4 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped></style>
