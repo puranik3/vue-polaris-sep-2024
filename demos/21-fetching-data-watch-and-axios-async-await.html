@@ -61,7 +61,9 @@
                 // watch is used to monitor change on some data item and run some logic (not to compute derived data from existing data - for that we have computed. computed is for deriving data synchronously. watch is for doing something asynchronously - like making call to the backend.)
                 watch: {
                     // when page changes, we want to fetch fresh workshops and set the workshops data property
-                    page() {
+                    page(newPage, oldPage) {
+                        console.log(oldPage, newPage);
+
                         this.getWorkshops();
 
                         // nothing returned unlike computed property's method
