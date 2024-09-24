@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script> -->
+
+        <script>
+            // Component Definition Object - it defines the component
+            const IconButton = {
+                props: ["icon", "text"],
+
+                // data (for component) MUST be a method even in Vue 2
+                // data() {
+                //     return {};
+                // },
+
+                template: `
+                    <button>
+                        {{ icon }} {{ text }}
+                    </button>
+                `,
+                created() {
+                    console.log(this.icon, this.text); // "this".prop (just like "this".data)
+                },
+            };
+
+            // register the component
+            // 2. global registration (registration of IconButton once throughout app)
+
+            // Local registration is better -> Vue will be able to detect when you never use a component and reduce bundle size (tree-shaking).
+            // Global registered component will ALWAYS be part of the bundle - whether you end up using or not - good for only commonly used components
+
+            Vue.component("IconBtn", IconButton);
+
+            new Vue({
+                el: "#app",
+                data() {
+                    return {
+                        smile: "SMILE",
+                    };
+                },
+                template: `
+                    <div class="container my-5">
+                        Vue 2
+                        <IconBtn
+                            icon="😀"
+                            :text="smile"
+                        >
+                        </IconBtn>
+                        <IconBtn icon="😂" text="Laugh"></IconBtn>
+                        <IconBtn icon="😇" text="Halo"></IconBtn>
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>

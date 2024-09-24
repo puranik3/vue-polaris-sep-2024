@@ -19,10 +19,12 @@
             // Component Definition Object - it defines the component
             const IconButton = {
                 props: ["icon", "text"],
+
                 // data (for component) MUST be a method even in Vue 2
-                data() {
-                    return {};
-                },
+                // data() {
+                //     return {};
+                // },
+
                 template: `
                     <button>
                         {{ icon }} {{ text }}
