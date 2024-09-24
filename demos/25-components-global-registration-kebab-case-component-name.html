@@ -35,11 +35,7 @@
                 },
             };
 
-            // register the component
-            // 2. global registration (registration of IconButton once throughout app)
-
-            // Local registration is better -> Vue will be able to detect when you never use a component and reduce bundle size (tree-shaking).
-            // Global registered component will ALWAYS be part of the bundle - whether you end up using or not - good for only commonly used components
+            // kebab-case version of using components (icon-button instead of IconBtn)
 
             Vue.component("IconBtn", IconButton);
 
@@ -58,8 +54,11 @@
                             :text="smile"
                         >
                         </IconBtn>
-                        <IconBtn icon="😂" text="Laugh"></IconBtn>
-                        <IconBtn icon="😇" text="Halo"></IconBtn>
+                        <Icon-Btn icon="😂" text="Laugh"></Icon-Btn>
+                        <icon-btn icon="😇" text="Halo"></icon-btn>
+
+                        <!-- does not work -->
+                        <!-- <icOn-bTn icon="😇" text="Halo"></icOn-bTn> -->
                     </div>
                 `,
             });
