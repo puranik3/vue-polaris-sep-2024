@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script> -->
+
+        <script>
+            const FaqQuestion = {
+                name: "FaqQuestion", // helps us identify the component instances in the component hierarchy shown in Vue developer tools
+                props: ["question"],
+                methods: {
+                    toggle() {
+                        // arg1 -> custom event name, arg 2 -> any extra data, usually an object (this data is the $event object in the listener)
+                        this.$emit("questionClick", {
+                            timestamp: new Date(),
+                        });
+                    },
+                },
+                template: `
+                    <div
+                        class="p-3 bg-dark text-light"
+                        @click="toggle"
+                    >
+                        {{ question }}
+                    </div>
+                `,
+            };
+
+            const FaqAnswer = {
+                name: "FaqAnswer", // helps us identify the component instances in the component hierarchy shown in Vue developer tools
+
+                props: ["answer", "show"],
+                template: `
+                    <div class="p-3" v-show="show">{{ answer }}</div>
+                `,
+            };
+
+            const FaqItem = {
+                props: ["question", "answer", "initialShow"], // EXERCISE: Improve by setting up validations, custom validator (if any)
+                name: "FaqItem",
+                data() {
+                    return {
+                        show: this.initialShow,
+                    };
+                },
+                components: {
+                    FaqQuestion,
+                    FaqAnswer,
+                },
+                methods: {
+                    toggleAnswer(event) {
+                        // if you want the event to bubble to this one's parent (grandparent of FAQQuestion, i.e. the root instance) check this - https://stackoverflow.com/questions/41993508/vuejs-bubbling-custom-events
+                        console.log("inside FaqItem :", event); // data emitted by child / descendant
+                        this.show = !this.show;
+                    },
+                },
+                template: `
+                    <div class="border border-dark">
+                        <faq-question
+                            :question="question"
+                            @questionClick="toggleAnswer( $event )"
+                        >
+                        </faq-question>
+                        <faq-answer
+                            :answer="answer"
+                            :show="show"
+                        >
+                        </faq-answer>
+                    </div>
+                `,
+                created() {
+                    // check the prototype chain -> there is $emit
+                    console.log(this);
+                },
+            };
+
+            new Vue({
+                el: "#app",
+                components: {
+                    // FaqItem: FaqItem
+                    FaqItem,
+                },
+                data: {
+                    faqData: [
+                        {
+                            id: 1,
+                            question: "What is Vue?",
+                            answer: "It is a UI library created by Evan You, to build Single Page applications",
+                        },
+                        {
+                            id: 2,
+                            question: "What is Vuex?",
+                            answer: "It is one of the state management libraries created by the Vue team.",
+                            initialShow: true,
+                        },
+                    ],
+                },
+                template: `
+                    <div class="container my-5">
+                        <div
+                            v-for="faqItem of faqData"
+                            :key="faqItem.id"
+                            class="mb-4"
+                        >
+                            <faq-item
+                                :question="faqItem.question"
+                                :answer="faqItem.answer"
+                                :initialShow="faqItem.initialShow"
+                            ></faq-item>
+                        </div>
+
+                        <!-- we can pass all the properties in an object as props using v-bind -->
+                        <div class="mb-4">
+                            <faq-item
+                                v-bind="faqData[0]"
+                            ></faq-item>
+                        </div>
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>
