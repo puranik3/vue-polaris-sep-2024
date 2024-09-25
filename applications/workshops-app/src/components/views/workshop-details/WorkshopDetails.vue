@@ -40,7 +40,8 @@
             </b-button>
         </div>
 
-        <router-view></router-view>
+        <!-- <router-view :id="id"></router-view> -->
+        <router-view :sessions="workshop?.sessions"></router-view>
     </div>
 </template>
 

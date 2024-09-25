@@ -28,7 +28,8 @@ const router = new Router({
                 {
                     path: '',
                     name: 'sessions-list',
-                    component: SessionsList
+                    component: SessionsList,
+                    props: true // the dynamic parameter - id, will be sent as a prop by the router itself
                 },
                 {
                     path: 'add',
@@ -38,6 +39,8 @@ const router = new Router({
 
             ]
         },
+
+        // should be the last route
         {
             path: '*',
             name: 'page-not-found',

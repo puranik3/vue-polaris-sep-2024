@@ -24,7 +24,12 @@ const getWorkshops = async (page = 1) => {
 
 const getWorkshopById = async (id) => {
     const response = await axios.get(
-        `/workshops/${id}`
+        `/workshops/${id}`,
+        {
+            params: {
+                _embed: 'sessions'
+            }
+        }
     );
 
     return response.data;
