@@ -1,14 +1,27 @@
 <template lang="">
     <div>
-        idFromRoute = {{ idFromRoute }}, id = {{ id }}
+        <!-- <div>
+            idFromRoute = {{ idFromRoute }}, id = {{ id }}
 
-        <div>Number of topics in this workshop = {{ sessions.length }}</div>
+            <div>Number of topics in this workshop = {{ sessions.length }}</div>
+        </div> -->
+
+        <b-list-group>
+            <b-list-group-item v-for="session of sessions" :key="session.id">
+                <sessions-list-item :session="session"></sessions-list-item>
+            </b-list-group-item>
+        </b-list-group>
     </div>
 </template>
 
 <script>
+import SessionsListItem from './sessions-list-item/SessionsListItem.vue';
+
 export default {
     name: 'SessionsList',
+    components: {
+        SessionsListItem
+    },
     props: {
         id: String,
         sessions: {
