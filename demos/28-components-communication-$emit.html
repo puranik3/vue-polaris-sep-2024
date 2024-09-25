@@ -19,6 +19,16 @@
             const FaqQuestion = {
                 name: "FaqQuestion", // helps us identify the component instances in the component hierarchy shown in Vue developer tools
                 props: ["question"],
+                inject: {
+                    theme: {
+                        from: "theme",
+                        default: "light",
+                    },
+                    showValue: {
+                        from: "showValue",
+                        default: false,
+                    },
+                },
                 methods: {
                     toggle() {
                         // arg1 -> custom event name, arg 2 -> any extra data, usually an object (this data is the $event object in the listener)
@@ -33,6 +43,9 @@
                         @click="toggle"
                     >
                         {{ question }}
+
+                        <div>Theme is - {{ theme }}</div>
+                        <div>Show is - {{ showValue }}</div>
                     </div>
                 `,
             };
@@ -40,10 +53,28 @@
             const FaqAnswer = {
                 name: "FaqAnswer", // helps us identify the component instances in the component hierarchy shown in Vue developer tools
 
+                // inject: ["show", "theme"]
+                inject: {
+                    theme: {
+                        from: "theme",
+                        default: "light",
+                    },
+                    showValue: {
+                        from: "show",
+                        default: false,
+                    },
+                },
                 props: ["answer", "show"],
                 template: `
-                    <div class="p-3" v-show="show">{{ answer }}</div>
+                    <div>
+                        <div class="p-3" v-show="show">{{ answer }}</div>
+                        <div>Theme is - {{ theme }}</div>
+                        <div>Show is - {{ showValue }}</div>
+                    </div>
                 `,
+                created() {
+                    console.log(this.theme, this.showValue);
+                },
             };
 
             const FaqItem = {
@@ -52,6 +83,11 @@
                 data() {
                     return {
                         show: this.initialShow,
+                    };
+                },
+                provide() {
+                    return {
+                        showValue: this.show,
                     };
                 },
                 components: {
@@ -79,35 +115,47 @@
                         </faq-answer>
                     </div>
                 `,
-                created() {
+                updated() {
                     // check the prototype chain -> there is $emit
                     console.log(this);
                 },
             };
 
-            new Vue({
+            const app = new Vue({
                 el: "#app",
+                // provide: {
+                //     theme: "light",
+                // },
+                provide() {
+                    return {
+                        theme: this.theme,
+                    };
+                },
                 components: {
                     // FaqItem: FaqItem
                     FaqItem,
                 },
-                data: {
-                    faqData: [
-                        {
-                            id: 1,
-                            question: "What is Vue?",
-                            answer: "It is a UI library created by Evan You, to build Single Page applications",
-                        },
-                        {
-                            id: 2,
-                            question: "What is Vuex?",
-                            answer: "It is one of the state management libraries created by the Vue team.",
-                            initialShow: true,
-                        },
-                    ],
+                data() {
+                    return {
+                        theme: "light",
+                        faqData: [
+                            {
+                                id: 1,
+                                question: "What is Vue?",
+                                answer: "It is a UI library created by Evan You, to build Single Page applications",
+                            },
+                            {
+                                id: 2,
+                                question: "What is Vuex?",
+                                answer: "It is one of the state management libraries created by the Vue team.",
+                                initialShow: true,
+                            },
+                        ],
+                    };
                 },
                 template: `
                     <div class="container my-5">
+                        <button @click="this.theme = ( this.theme === 'light' ? 'dark' : 'light' )">Change theme</button>
                         <div
                             v-for="faqItem of faqData"
                             :key="faqItem.id"
@@ -129,6 +177,11 @@
                     </div>
                 `,
             });
+
+            // app.provide("user", {
+            //     name: "john",
+            //     token: "john token",
+            // });
         </script>
     </body>
 </html>

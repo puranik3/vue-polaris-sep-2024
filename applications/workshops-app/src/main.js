@@ -4,6 +4,8 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueRouter from 'vue-router';
 import router from './routes'
 
+import PolarisPagination from './components/utils/PolarisPagination';
+
 import './services/configureAxios'; // just running the file and not specifically importing anything
 
 // Import Bootstrap and BootstrapVue CSS files (order is important)
@@ -17,6 +19,7 @@ Vue.use(IconsPlugin)
 
 // add routing functionality
 Vue.use(VueRouter);
+Vue.component('PolarisPagination', PolarisPagination)
 
 Vue.config.productionTip = false;
 

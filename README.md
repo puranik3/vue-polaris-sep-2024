@@ -1,8 +1,8 @@
 # Vue Training
 Vue JS Training, Sep 2024, Polaris
 
-## Vue videos playlist
-TBD
+## Vue course
+[Vue videos playlist on YouTube](https://www.youtube.com/playlist?list=PLCk2SWeTHqQjbME3mOg8fOFjHgmj8rsXt)
 
 ## Exercise
 - Filter in the app (Workshops list)

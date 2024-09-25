@@ -17,43 +17,54 @@
 
         <div class="row" v-else>
             <div class="col-12">
-                <div class="my-3">
-                    You are viewing page {{ page }}
-                </div>
-                <div>
-                    <button class="btn btn-sm btn-primary mr-2" @click="--page">Previous</button>
-                    <button class="btn btn-sm btn-primary" @click="++page">Next</button>
-                </div>
+                <app-pagination @pageChange="page = $event.newPage">
+                    <!-- v-slot:page-number-display="{ page }" -> you have accepted to use the child component's page variable, not the local one -->
+                    <template v-slot:page-number-display="{ page }">
+                        You are viewing page {{ page }}
+                    </template>
+                </app-pagination>
+            </div>
+
+            <div class="col-12 my-3">
+                <input type="search" placeholder="Filter by name of the workshop" class="form-control"
+                    v-model="filterKey" />
             </div>
 
             <!-- "key" should be unique among the items in that array, and should be stable (cannot be updated) -->
 
-            <div class="col-12 col-md-4 d-flex my-3" v-for="workshop of workshops" :key="workshop.id">
-                <div class="card p-3 w-100">
-                    <img :src="workshop.imageUrl" :alt="workshop.name" class="card-img-top" />
-                    <div class="card-body">
-                        <h5 class="card-title">{{ workshop.name }}</h5>
-                        <div class="card-text" v-html="workshop.description"></div>
-                        <a href="#" class="btn btn-primary">Know more</a>
-                    </div>
-                </div>
+            <div class="col-12 col-md-4 d-flex my-3" v-for="workshop of filteredWorkshops" :key="workshop.id">
+                <app-workshops-list-item :workshop="workshop"></app-workshops-list-item>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import AppPagination from '@/components/utils/Pagination.vue';
+import AppWorkshopsListItem from '../workshops/WorkshopsListItem.vue';
 import { getWorkshops } from '@/services/workshops';
 
 export default {
     name: 'AppWorkshopsList',
+    components: {
+        AppPagination,
+        AppWorkshopsListItem
+    },
     data() {
         return {
             loading: true,
             error: null,
             workshops: [],
+
             page: 1,
+
+            filterKey: ''
         };
+    },
+    computed: {
+        filteredWorkshops() {
+            return this.workshops.filter(w => w.name.toUpperCase().includes(this.filterKey.trim().toUpperCase()))
+        }
     },
     methods: {
         async getWorkshops() {
@@ -73,6 +84,7 @@ export default {
         page(newPage, oldPage) {
             console.log(oldPage, newPage);
 
+            this.loading = true;
             this.getWorkshops();
 
             // nothing returned unlike computed property's method

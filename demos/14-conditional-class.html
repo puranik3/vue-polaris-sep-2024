@@ -49,11 +49,6 @@
                 el: "#app",
                 // v2 -> either a data object, a function that returns the data object
                 data: {
-                    message: {
-                        text: "Mail was sent successfully",
-                        status: "success",
-                        importance: "unimportant",
-                    },
                     successMessage: {
                         text: "Mail was sent successfully",
                         status: "success",
@@ -64,6 +59,10 @@
                         status: "error",
                         importance: "important",
                     },
+                    message: null,
+                },
+                created() {
+                    this.message = this.successMessage;
                 },
                 computed: {
                     messageStyle() {

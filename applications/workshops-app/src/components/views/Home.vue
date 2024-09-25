@@ -8,12 +8,28 @@
             </p>
             <b-button tovariant="primary" to="/workshops">Check out nearby workshops</b-button>
         </b-jumbotron>
+
+        <div>
+            <button @click="totalItems += 50">Get more items</button>
+            <button @click="currentPage++">
+                Next page
+            </button>
+
+            <polaris-pagination :currentPage="currentPage" :pageSize="10" :totalItems="totalItems"
+                showingCopy="YES"></polaris-pagination>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'AppHome'
+    name: 'AppHome',
+    data() {
+        return {
+            currentPage: 1,
+            totalItems: 55,
+        };
+    },
 }
 </script>
 
