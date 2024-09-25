@@ -5,7 +5,7 @@
             <h5 class="card-title">{{ workshop.name }}</h5>
             <div class="card-text" v-html="workshop.description"></div>
             <!-- <router-link :to="'/workshops/' + workshop.id" class="btn btn-primary">Know more</router-link> -->
-            <router-link :to="{ name: 'workshop-details', params: { id: workshop.id } }" class="btn btn-primary">Know
+            <router-link :to="{ name: 'sessions-list', params: { id: workshop.id } }" class="btn btn-primary">Know
                 more</router-link>
         </div>
     </div>

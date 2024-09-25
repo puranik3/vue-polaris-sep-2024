@@ -30,14 +30,32 @@
                 </div>
             </div>
         </div>
+
+        <div class="mt-5 mb-3">
+            <b-button size="sm" variant="primary" class="mr-2" :to="{ name: 'sessions-list', params: { id: id } }" exact>
+                List of sessions
+            </b-button>
+            <b-button size="sm" variant="primary" :to="{ name: 'request-session', params: { id: id } }">
+                Request new session
+            </b-button>
+        </div>
+
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
+// import SessionsList from '@/components/workshops/sessions-list/SessionsList.vue';
+// import RequestSession from '@/components/workshops/request-sessions/RequestSession.vue';
+
 import { getWorkshopById } from '@/services/workshops';
 
 export default {
     name: 'WorkshopDetails',
+    // components: {
+    //     SessionsList,
+    //     RequestSession
+    // },
     data() {
         return {
             loading: true,
