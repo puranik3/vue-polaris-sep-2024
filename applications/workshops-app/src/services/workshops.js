@@ -22,8 +22,12 @@ const getWorkshops = async (page = 1) => {
     }
 };
 
-const getWorkshopById = async () => {
+const getWorkshopById = async (id) => {
+    const response = await axios.get(
+        `/workshops/${id}`
+    );
 
+    return response.data;
 };
 
 // named exports
