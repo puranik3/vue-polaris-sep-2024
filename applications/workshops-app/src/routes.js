@@ -4,6 +4,7 @@ import AppWorkshopsList from './components/views/workshops-list/WorkshopsList.vu
 import WorkshopDetails from './components/views/workshop-details/WorkshopDetails.vue';
 import SessionsList from './components/workshops/sessions-list/SessionsList.vue';
 import RequestSession from './components/workshops/request-sessions/RequestSession.vue';
+import PageNotFound from './components/common/PageNotFound.vue';
 
 const router = new Router({
     mode: 'history',
@@ -36,6 +37,12 @@ const router = new Router({
                 },
 
             ]
+        },
+        {
+            path: '*',
+            name: 'page-not-found',
+            component: PageNotFound
+            // redirect: '/'
         }
     ]
 });
