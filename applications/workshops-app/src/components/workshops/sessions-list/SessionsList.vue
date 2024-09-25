@@ -10,8 +10,8 @@
             <b-list-group-item v-for="session of sessions" :key="session.id">
                 <sessions-list-item
                 :session="session"
-                @dislike="$emit( 'downvote', $event)"
-                @like="$emit( 'upvote', $event)"
+                @downvote="$emit( 'downvote', $event)"
+                @upvote="$emit( 'upvote', $event)"
             ></sessions-list-item>
             </b-list-group-item>
         </b-list-group>

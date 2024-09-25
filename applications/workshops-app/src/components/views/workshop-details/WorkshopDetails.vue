@@ -43,8 +43,8 @@
         <!-- <router-view :id="id"></router-view> -->
         <router-view
             :sessions="workshop?.sessions"
-            @dislike="vote( $event, 'dislike')"
-            @like="vote( $event, 'like')"
+            @downvote="vote( $event, 'downvote')"
+            @upvote="vote( $event, 'upvote')"
         ></router-view>
     </div>
 </template>
@@ -54,6 +54,7 @@
 // import RequestSession from '@/components/workshops/request-sessions/RequestSession.vue';
 
 import { getWorkshopById } from '@/services/workshops';
+import { vote } from '@/services/sessions';
 
 export default {
     name: 'WorkshopDetails',
@@ -88,8 +89,12 @@ export default {
             }
         },
         // voteType -> 'like' | 'dislike'
-        vote({ id }, voteType) {
+        async vote({ id }, voteType) {
             console.log(voteType, id);
+            const updatedSession = await vote(id, voteType);
+
+            // you can also use array splice to update a particular item in the array if you know its index
+            this.workshop.sessions = this.workshop.sessions.map(s => s.id === id ? updatedSession : s);
         }
     },
     mounted() {
