@@ -10,6 +10,9 @@ import router from './routes'
 // switch to this for the modified one
 import PolarisPagination from './components/utils/PolarisPagination';
 
+import AppSpinner from '@/components/utils/Spinner';
+import AppAlert from '@/components/utils/Alert';
+
 import './services/configureAxios'; // just running the file and not specifically importing anything
 
 // Import Bootstrap and BootstrapVue CSS files (order is important)
@@ -23,7 +26,9 @@ Vue.use(IconsPlugin)
 
 // add routing functionality
 Vue.use(VueRouter);
-Vue.component('PolarisPagination', PolarisPagination)
+Vue.component('PolarisPagination', PolarisPagination);
+Vue.component('AppSpinner', AppSpinner);
+Vue.component('AppAlert', AppAlert);
 
 Vue.config.productionTip = false;
 

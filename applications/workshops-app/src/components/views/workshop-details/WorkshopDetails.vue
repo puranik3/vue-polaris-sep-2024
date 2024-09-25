@@ -1,5 +1,6 @@
 <template lang="">
     <div>
+        <!-- EXERCISE: Refactor to create custom components for spinner, error -->
         <div v-if="loading">
             <div class="d-flex justify-content-center mb-3">
                 <b-spinner label="Loading..."></b-spinner>
@@ -12,7 +13,7 @@
             </b-alert>
         </div>
 
-        <div>
+        <div v-else>
             <h1>{{ workshop.name }}</h1>
             <hr />
 
@@ -40,13 +41,15 @@ export default {
         };
     },
     computed: {
-        // props, data, things like this.$rute are "reactive" -> we can derive computed data from these
+        // props, data, things like this.$route are "reactive" -> we can derive computed data from these
         id() {
             return this.$route.params.id;
         }
     },
     methods: {
         async getWorkshopById() {
+            this.loading = true;
+
             try {
                 const workshop = await getWorkshopById(this.id);
                 this.workshop = workshop;
