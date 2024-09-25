@@ -40,8 +40,9 @@
 </template>
 
 <script>
-import AppPagination from '@/components/utils/Pagination.vue';
-import AppWorkshopsListItem from '../workshops/WorkshopsListItem.vue';
+import AppPagination from '@/components/utils/Pagination';
+import AppWorkshopsListItem from '../../workshops/workshops-list-item/WorkshopsListItem';
+
 import { getWorkshops } from '@/services/workshops';
 
 export default {

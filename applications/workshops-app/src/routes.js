@@ -1,7 +1,7 @@
 import Router from 'vue-router';
-import AppHome from './components/views/Home.vue';
-import AppWorkshopsList from './components/views/WorkshopsList.vue';
-import WorkshopDetails from './components/views/WorkshopDetails.vue';
+import AppHome from './components/views/home/Home.vue';
+import AppWorkshopsList from './components/views/workshops-list/WorkshopsList.vue';
+import WorkshopDetails from './components/views/workshop-details/WorkshopDetails.vue';
 
 const router = new Router({
     mode: 'history',
