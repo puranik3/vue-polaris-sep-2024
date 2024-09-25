@@ -21,7 +21,12 @@
                 <div class="col-12 col-md-4">
                     <b-img fluid :src="workshop.imageUrl" :alt="workshop.name"></b-img>
                 </div>
-                <div class="col-12 col-md-8" v-html="workshop.description">
+                <div class="col-12 col-md-8">
+                    <div v-html="workshop.description">
+                    </div>
+                    <div class="my-3">
+                        {{ workshop.startDate | date('indian') }} - {{ workshop.endDate | date('indian') }}
+                    </div>
                 </div>
             </div>
         </div>

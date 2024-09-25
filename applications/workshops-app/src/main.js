@@ -13,6 +13,8 @@ import PolarisPagination from './components/utils/PolarisPagination';
 import AppSpinner from '@/components/utils/Spinner';
 import AppAlert from '@/components/utils/Alert';
 
+import dateFilter from '@/filters/DateFilter';
+
 import './services/configureAxios'; // just running the file and not specifically importing anything
 
 // Import Bootstrap and BootstrapVue CSS files (order is important)
@@ -26,9 +28,12 @@ Vue.use(IconsPlugin)
 
 // add routing functionality
 Vue.use(VueRouter);
+
 Vue.component('PolarisPagination', PolarisPagination);
 Vue.component('AppSpinner', AppSpinner);
 Vue.component('AppAlert', AppAlert);
+
+Vue.filter('date', dateFilter);
 
 Vue.config.productionTip = false;
 

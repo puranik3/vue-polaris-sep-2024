@@ -8,7 +8,7 @@ import axios from 'axios';
 const getWorkshops = async (page = 1) => {
     try {
         const response = await axios.get(
-            `/workshop`,
+            `/workshops`,
             {
                 params: {
                     _page: page,
