@@ -10,12 +10,29 @@
         </b-jumbotron>
 
         <div>
-            <button @click="totalItems += 50">Get more items</button>
-            <button @click="currentPage++">
-                Next page
+            <button @click="totalItems += 50" class="btn btn-sm btn-primary mr-2">
+                Get more items
             </button>
 
-            <polaris-pagination :currentPage="currentPage" :pageSize="10" :totalItems="totalItems"
+            <div class="my-2">
+                <button @click="pageSize -= 10" class="btn btn-sm btn-primary mr-2">
+                    Decrease size by 10
+                </button>
+                <button @click="pageSize += 10" class="btn btn-sm btn-primary mr-2">
+                    Increase page size by 10
+                </button>
+            </div>
+
+            <div class="my-2">
+                <button @click="currentPage--" class="btn btn-sm btn-primary mr-2">
+                    Previous page
+                </button>
+                <button @click="currentPage++" class="btn btn-sm btn-primary mr-2">
+                    Next page
+                </button>
+            </div>
+
+            <polaris-pagination :currentPage="currentPage" :pageSize="pageSize" :totalItems="totalItems"
                 showingCopy="YES"></polaris-pagination>
         </div>
     </div>
@@ -28,6 +45,7 @@ export default {
         return {
             currentPage: 1,
             totalItems: 55,
+            pageSize: 10
         };
     },
 }

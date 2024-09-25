@@ -4,14 +4,18 @@
         <div class="card-body">
             <h5 class="card-title">{{ workshop.name }}</h5>
             <div class="card-text" v-html="workshop.description"></div>
-            <a href="#" class="btn btn-primary">Know more</a>
+            <!-- <router-link :to="'/workshops/' + workshop.id" class="btn btn-primary">Know more</router-link> -->
+            <router-link :to="{ name: 'workshop-details', params: { id: workshop.id } }" class="btn btn-primary">Know
+                more</router-link>
         </div>
     </div>
 </template>
+
 <script>
 export default {
     name: 'WorkshopsListItem',
     props: ["workshop"]
 }
 </script>
+
 <style lang="scss"></style>

@@ -4,6 +4,10 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueRouter from 'vue-router';
 import router from './routes'
 
+// switch to this for the original one
+// import PolarisPagination from './components/utils/PolarisPagination.original';
+
+// switch to this for the modified one
 import PolarisPagination from './components/utils/PolarisPagination';
 
 import './services/configureAxios'; // just running the file and not specifically importing anything

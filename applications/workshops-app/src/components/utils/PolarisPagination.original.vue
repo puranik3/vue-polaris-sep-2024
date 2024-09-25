@@ -46,20 +46,19 @@ export default {
         }
     },
     data: function () {
+        var totalPages = (this.totalItems / this.pageSize).toFixed(2);
         return {
-            // totalPages: Math.ceil(totalPages),
+            totalPages: Math.ceil(totalPages),
             isExpanded: false
         }
     },
-    computed: {
-        totalPages() {
-            return Math.ceil((this.totalItems / this.pageSize).toFixed(2));
-        },
-        firstItem() {
+    methods: {
+        getFirstItem: function () {
+            // If first page don't calculate a thing
             if (this.currentPage === 1) return 1;
             return ((this.currentPage - 1) * this.pageSize) + 1;
         },
-        lastItem() {
+        getLastItem: function () {
             // If first page
             if (this.currentPage === 1 && this.totalPages <= 1) return this.totalItems;
             if (this.currentPage === 1) return this.pageSize;
@@ -68,12 +67,29 @@ export default {
             return this.currentPage * this.pageSize;
         }
     },
+    computed: {
+        firstItem: {
+            get: function () {
+                return this.getFirstItem();
+            },
+            set: function (value) {
+                return value;
+            }
+        },
+        lastItem: {
+            get: function () {
+                return this.getLastItem();
+            },
+            set: function (value) {
+                return value;
+            }
+        }
+    },
     watch: {
         totalItems: function (value) {
             this.totalPages = Math.round(this.totalItems / this.pageSize);
-
-            // this.firstItem = this.getFirstItem();
-            // this.lastItem = this.getLastItem();
+            this.firstItem = this.getFirstItem();
+            this.lastItem = this.getLastItem();
 
             return value;
         }
