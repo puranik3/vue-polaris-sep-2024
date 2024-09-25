@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import { BootstrapVue, IconsPlugin, BIcon, BIconHandThumbsDown, BIconHandThumbsUp } from 'bootstrap-vue'
 import VueRouter from 'vue-router';
 import router from './routes'
 
@@ -12,6 +12,7 @@ import PolarisPagination from './components/utils/PolarisPagination';
 
 import AppSpinner from '@/components/utils/Spinner';
 import AppAlert from '@/components/utils/Alert';
+import AppVotingWidget from '@/components/utils/VotingWidget';
 
 import dateFilter from '@/filters/DateFilter';
 
@@ -30,8 +31,14 @@ Vue.use(IconsPlugin)
 Vue.use(VueRouter);
 
 Vue.component('PolarisPagination', PolarisPagination);
+
 Vue.component('AppSpinner', AppSpinner);
 Vue.component('AppAlert', AppAlert);
+Vue.component('AppVotingWidget', AppVotingWidget);
+
+Vue.component('BIcon', BIcon);
+Vue.component('BLike', BIconHandThumbsUp);
+Vue.component('BDislike', BIconHandThumbsDown);
 
 Vue.filter('date', dateFilter);
 

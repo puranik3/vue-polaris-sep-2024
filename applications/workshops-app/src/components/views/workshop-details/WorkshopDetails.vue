@@ -41,7 +41,11 @@
         </div>
 
         <!-- <router-view :id="id"></router-view> -->
-        <router-view :sessions="workshop?.sessions"></router-view>
+        <router-view
+            :sessions="workshop?.sessions"
+            @dislike="vote( $event, 'dislike')"
+            @like="vote( $event, 'like')"
+        ></router-view>
     </div>
 </template>
 
@@ -83,6 +87,10 @@ export default {
                 this.loading = false;
             }
         },
+        // voteType -> 'like' | 'dislike'
+        vote({ id }, voteType) {
+            console.log(voteType, id);
+        }
     },
     mounted() {
         // router is for things like redirection etc.

@@ -4,6 +4,13 @@
         <div>{{ session.abstract }}</div>
         <div class="my-3">{{ session.speaker }}</div>
         <div>{{ session.level }}</div>
+        <div class="mt-2">
+            <app-voting-widget
+                :votes="session.upvoteCount" @dislike="$emit( 'downvote', { id: session.id } )"
+                @like="$emit( 'upvote', { id: session.id } )"
+            >
+            </app-voting-widget>
+        </div>
     </div>
 </template>
 
