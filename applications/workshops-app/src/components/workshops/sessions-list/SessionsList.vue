@@ -1,5 +1,8 @@
 <template lang="">
     <div>
+        <h2>List of sessions</h2>
+        <hr />
+
         <!-- <div>
             idFromRoute = {{ idFromRoute }}, id = {{ id }}
 

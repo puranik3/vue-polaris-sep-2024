@@ -88,7 +88,7 @@ export default {
                 this.loading = false;
             }
         },
-        // voteType -> 'like' | 'dislike'
+        // voteType -> 'upvote' | 'downvote'
         async vote({ id }, voteType) {
             console.log(voteType, id);
             const updatedSession = await vote(id, voteType);

@@ -10,3 +10,4 @@ Vue JS Training, Sep 2024, Polaris
 - Define a star rating component - shows 5 stars, takes rating value as input (1 - 5). It displays the rating (with empty, half star, fully filled solid star/moon) - Additionally you can implement click on star to change rating value.
 - Validation logic for previous / next buttons (disabling buttons)
 - Any lab guide questions (Vue / React lab guides)
+- Add toast notification - https://www.npmjs.com/package/vue-toastification
