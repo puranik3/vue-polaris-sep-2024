@@ -102,7 +102,7 @@
                             or
                                 v-slot:default=""
                         -->
-                        <template v-slot:default="{ workshop }">
+                        <template v-slot="{ workshop }">
                             <h5 class="card-title">
                                 <a target="_blank" :href="'https://workshops-server.onrender.com/workshops/' + workshop.id">
                                     {{ workshop.name }}

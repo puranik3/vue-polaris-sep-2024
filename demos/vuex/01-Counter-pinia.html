@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Vue Demo Template</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+        />
+        <style>
+            .value {
+                display: inline-block;
+                min-width: 30px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-demi/0.14.8/index.iife.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pinia/2.1.7/pinia.iife.js"></script>
+
+        <script>
+            // Step 1: Define the Pinia Store
+            // ...
+
+            // Step 2: Setup Pinia in the Vue app
+            // ...
+
+            const Counter = {
+                template: `
+                    <div class="counter">
+                        <button @click="decrement" class="btn btn-dark btn-sm">-</button>
+                        <div class="value">valueAnother = {{valueAnother}}</div> | 
+                        <div class="value">value = {{value}}</div> | 
+                        <div class="value">value x 2 = {{doubleValue}}</div>
+                        <button @click="increment" class="btn btn-dark btn-sm">+</button>
+                    </div>
+                `,
+                // Step 3: Define computed properties to extract state from the store
+                // ...
+                // Step 4: Define methods to map call of actions of the store
+                // ...
+            };
+
+            new Vue({
+                el: "#app",
+                // Step 5: Add pinia object to share it across the app components
+                components: {
+                    Counter,
+                },
+                template: `
+                    <div id="app" class="container my-4">
+                        <h1>Counter</h1>
+                        <hr />
+                        <Counter />
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>
