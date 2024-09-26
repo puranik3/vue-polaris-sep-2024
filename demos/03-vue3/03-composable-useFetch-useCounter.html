@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.js"></script>
+
+        <script>
+            const { onMounted, reactive, ref, toRefs } = Vue;
+
+            const getWorkshops = async (page = 1) => {
+                const response = await axios.get(
+                    `https://workshops-server.onrender.com/workshops`,
+                    {
+                        params: {
+                            _page: page,
+                        },
+                    }
+                );
+
+                return response.data;
+            };
+
+            const WorkshopsList = {
+                name: "WorkshopsList",
+                setup() {
+                    // data
+                    const state = reactive({
+                        loading: true,
+                        error: null,
+                        workshops: [],
+                    });
+
+                    const page = ref(1);
+
+                    // lifecycle methods
+
+                    // created (if you want to use)
+                    // await getWorkshops() // this will work in SFC as well
+
+                    // mounted (what we choose to use instead of created)
+                    onMounted(async () => {
+                        try {
+                            const workshops = await getWorkshops();
+
+                            // update data
+                            // observe that for data created using reactive(), there is no ".value" used to refer to or update the value
+                            state.workshops = workshops;
+                        } catch (error) {
+                            state.error = error;
+                        } finally {
+                            state.loading = false;
+                        }
+                    });
+
+                    // this wont work - when we destructure - the individual pieces ie. loading, error, workshops are not reactive - UI wont update
+                    // const { loading, error, workshops } = state;
+
+                    // using toRefs() will make these reactive as well
+                    const { loading, error, workshops } = toRefs(state);
+
+                    // expose these to the template using state created using reatcive()... - works
+                    // return {
+                    //     state,
+                    // };
+
+                    return {
+                        loading, // destructured from reactive
+                        error, // ...
+                        workshops, // ...
+                        page, // ref
+                    };
+                },
+                template: `
+                    <div>
+                        <div>You are vewing page {{ page }}</div>
+                        <div v-if="loading">
+                            Loading workshops...
+                        </div>
+                        <div v-else-if="error">
+                            {{ error.message }}
+                        </div>
+                        <div v-else>
+                            <ul>
+                                <li v-for="workshop of workshops" :key="workshop.id">
+                                    {{ workshop.name }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                `,
+            };
+
+            const root = Vue.createApp({
+                components: {
+                    WorkshopsList,
+                },
+                data() {
+                    return {};
+                },
+                template: `
+                    <div class="container my-5">
+                        <workshops-list></workshops-list>
+                    </div>
+                `,
+            });
+
+            root.mount("#app");
+        </script>
+    </body>
+</html>
