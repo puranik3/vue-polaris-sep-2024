@@ -27,7 +27,9 @@ export default {
     return {
       getTheme: () => this.theme,
       toggleTheme: () => this.theme = (this.theme === 'light' ? 'dark' : 'light'),
-      contrastTheme: this.contrastThemeComputed
+
+      // EXERCISE: expose this through a function returning the contrastTheme, and make necessary changes in Home, Menu
+      getContrastTheme: () => this.contrastThemeComputed
     }
   },
   data() {
