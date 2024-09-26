@@ -98,10 +98,13 @@ export default {
             this.workshop.sessions = this.workshop.sessions.map(s => s.id === id ? updatedSession : s);
         },
         addSession({ session }) {
-            // Vue cannnot detect change to an array property (like session) within the reactive data (i.e. workshops)
+            // Vue cannnot detect certain changes to an array property (like session) within the reactive data (i.e. workshops)
+            // Reference: https://v2.vuejs.org/v2/guide/reactivity
+
+            // this it can detect
             this.workshop.sessions.push(session);
 
-            // we can overcome this problem by setting sessions property to a new array with the new session
+            // alternative approach (instead of push)
             // this.workshop.sessions = [
             //     ...this.workshop.sessions,
             //     session
