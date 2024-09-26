@@ -33,34 +33,70 @@
                 return response.data;
             };
 
+            // A composable that fetches data from the given source (using the given `fetcher` function that makes the backend call and returns the data)
+            const useFetch = (fetcher, initialData) => {
+                // --- data ---
+                const state = reactive({
+                    loading: true,
+                    error: null,
+                    data: initialData,
+                });
+
+                // -- methods --
+                const fetchData = async () => {
+                    state.loading = true;
+
+                    try {
+                        const data = await fetcher();
+
+                        // update data
+                        // observe that for data created using reactive(), there is no ".value" used to refer to or update the value
+                        state.data = data;
+                    } catch (error) {
+                        state.error = error;
+                    } finally {
+                        state.loading = false;
+                    }
+                };
+
+                // -- lifecycle methods ---
+                onMounted(fetchData);
+
+                // --- ready the data to be passed back to the component ---
+                // this wont work - when we destructure - the individual pieces ie. loading, error, data are not reactive - UI wont update
+                // const { loading, error, data } = state;
+
+                // using toRefs() will make these reactive as well
+                const { loading, error, data } = toRefs(state);
+
+                return {
+                    loading,
+                    error,
+                    data,
+                    fetchData, // the component may need to fetch data at other times (apart from at the time of mount)
+                };
+            };
+
             const WorkshopsList = {
                 name: "WorkshopsList",
                 setup() {
                     // --- data ---
-                    const state = reactive({
-                        loading: true,
-                        error: null,
-                        workshops: [],
-                    });
-
                     const page = ref(1);
+
+                    const fetcher = async () => {
+                        return await getWorkshops(page.value);
+                    };
+
+                    // like we normally use functions, the composables can be passed arguments for customization
+                    const {
+                        loading,
+                        error,
+                        data: workshops,
+                        fetchData,
+                    } = useFetch(fetcher, []);
 
                     // --- methods ---
                     // Methods are defined directly within setup function
-                    const fetchWorkshops = async () => {
-                        try {
-                            const workshops = await getWorkshops(page.value);
-
-                            // update data
-                            // observe that for data created using reactive(), there is no ".value" used to refer to or update the value
-                            state.workshops = workshops;
-                        } catch (error) {
-                            state.error = error;
-                        } finally {
-                            state.loading = false;
-                        }
-                    };
-
                     const previous = () => {
                         --page.value;
                     };
@@ -75,7 +111,7 @@
                     // await getWorkshops() // this will work in SFC as well
 
                     // mounted (what we choose to use instead of created)
-                    onMounted(fetchWorkshops);
+                    // onMounted(fetchWorkshops); // we moved this to useFetch() composable
 
                     // -- watchers ---
                     // watching data changes using composition API
@@ -87,15 +123,10 @@
                     // });
 
                     // we want to watch only 1 value -> page
-                    watch(page, fetchWorkshops);
+                    // Note that we provide the reactive variable and not with ".value"
+                    watch(page, fetchData);
 
-                    // this wont work - when we destructure - the individual pieces ie. loading, error, workshops are not reactive - UI wont update
-                    // const { loading, error, workshops } = state;
-
-                    // using toRefs() will make these reactive as well
-                    const { loading, error, workshops } = toRefs(state);
-
-                    // expose these to the template using state created using reatcive()... - works
+                    // expose these to the template using state created using reactive()... - works
                     // return {
                     //     state,
                     // };
@@ -109,6 +140,11 @@
                         next,
                     };
                 },
+                // watch: {
+                //     page() {
+                //         this.fetchWorkshops();
+                //     }
+                // },
                 template: `
                     <div>
                         <div>You are vewing page {{ page }}</div>
