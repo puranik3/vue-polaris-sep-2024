@@ -22,17 +22,11 @@ import AppMenu from '@/components/common/Menu.vue';
 export default {
   name: 'App',
 
-  // when we want to update the provided value through descendants, we maintain it in data instead, ad we provide getter / setter functions for the value
+  // when we want to provide only readable values...
   provide() {
     return {
-      getTheme: () => this.theme,
-      toggleTheme: () => this.theme = (this.theme === 'light' ? 'dark' : 'light'),
+      theme: 'dark',
       contrastTheme: this.contrastThemeComputed
-    }
-  },
-  data() {
-    return {
-      theme: 'dark'
     }
   },
   computed: {

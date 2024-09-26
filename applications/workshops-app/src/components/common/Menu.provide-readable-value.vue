@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-navbar toggleable="lg" :type="getThemeValue()" :variant="getThemeValue()">
+        <b-navbar toggleable="lg" :type="themeValue" :variant="themeValue">
             <b-navbar-brand to="/">Workshops App</b-navbar-brand>
 
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -21,7 +21,7 @@
 
                 <!-- Right aligned nav items -->
                 <b-navbar-nav class="ml-auto">
-                    <b-nav-item to="#" @click="toggleTheme">Change theme</b-nav-item>
+                    <b-nav-item to="#">Change theme</b-nav-item>
                     <b-nav-item to="/login">Login</b-nav-item>
                 </b-navbar-nav>
             </b-collapse>
@@ -34,12 +34,9 @@ export default {
     name: 'AppMenu',
     // inject: [ 'theme' ],
     inject: {
-        getThemeValue: {
-            from: 'getTheme',
+        themeValue: {
+            "from": 'theme',
             // default: 'light'
-        },
-        toggleTheme: {
-            from: 'toggleTheme'
         }
     }
 }
