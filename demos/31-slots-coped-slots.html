@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script> -->
+
+        <script src="scripts/workshops.js"></script>
+
+        <script>
+            const WorkshopsList = {
+                data() {
+                    return {
+                        workshops: workshops,
+                    };
+                },
+                template: `
+                    <div class="container my-5">
+                        <h1>List of workshops</h1>
+                        <hr />
+
+                        <div class="row">
+
+                            <!-- "key" should be unique among the items in that array, and should be stable (cannot be updated) -->
+
+                            <div
+                                class="col-12 col-md-4 d-flex my-3"
+                                v-for="(workshop, index) of workshops"
+                                :key="workshop.id"
+                            >
+                                <div class="card p-3 w-100">
+                                    <!--
+                                        If you want you can leave the slot empty. If you do not provide the UI from the parent component, nothing shows up here
+                                    -->
+                                    <!-- <slot></slot> -->
+
+                                    <slot
+                                        name="header"
+                                        :workshopImage="workshop.imageUrl"
+                                        :workshopName="workshop.name"
+                                    >
+                                        <img
+                                            :src="workshop.imageUrl"
+                                            :alt="workshop.name"
+                                            class="card-img-top"
+                                        />
+                                    </slot>
+                                    <div class="card-body">
+                                        <!-- default slot : the name is "default"-->
+                                        <slot :workshop="workshop">
+                                            <!--
+                                                this is the default content fo his slot if no content is provided
+                                            -->
+                                            <h5 class="card-title">{{ workshop.name }}</h5>
+                                            <div
+                                                class="card-text"
+                                                v-html="workshop.description"
+                                            ></div>
+                                            <a href="#" class="btn btn-primary">Know more</a>
+                                        </slot>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+            };
+
+            // whatever content you provide in workshops-list without a targeted template goes into tjhe default slot
+            const app = new Vue({
+                el: "#app",
+                components: {
+                    WorkshopsList,
+                },
+                template: `
+                    <workshops-list>
+
+                        <!-- <template v-slot:header :slot="{ workshopImage, workshopName }"> -->
+                        <template v-slot:header="w">
+                            <img
+                                :src="w.workshopImage"
+                                :alt="w.workshopName"
+                                class="card-img-top"
+                                style="border: 2px solid #ddd; border-radius: 50%;"
+                            />
+                        </template>
+
+                        <!--
+                            If you want to accept schild-scoped datta, you mUST put even default content inside a template. You can target it and get the child -> parent props either
+                            using
+                                v-slot="workshop"
+                            or
+                                v-slot:default=""
+                        -->
+                        <template v-slot:default="{ workshop }">
+                            <h5 class="card-title">
+                                <a target="_blank" :href="'https://workshops-server.onrender.com/workshops/' + workshop.id">
+                                    {{ workshop.name }}
+                                </a>
+                            </h5>
+                            <div
+                                class="card-text"
+                                v-html="workshop.description"
+                            ></div>
+                        </template>
+                    </workshops-list>
+                `,
+            });
+        </script>
+    </body>
+</html>
