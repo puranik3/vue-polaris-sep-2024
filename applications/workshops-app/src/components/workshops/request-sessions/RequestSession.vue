@@ -25,6 +25,10 @@
                     v-model="form.name"
                     @blur="$v.form.name.$touch()"
                 ></b-form-input>
+                <small v-if="$v.form.name.$error" class="text-danger">
+                    <div v-if="!$v.form.name.required">This field is required</div>
+                    <div v-if="!$v.form.name.nameValue">Name can have only letters and spaces</div>
+                </small>
             </b-form-group>
 
             <b-form-group label="Speaker" label-for="speaker">
