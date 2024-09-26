@@ -45,6 +45,7 @@
             :sessions="workshop?.sessions"
             @downvote="vote( $event, 'downvote')"
             @upvote="vote( $event, 'upvote')"
+            @sessionAdd="addSession( $event )"
         ></router-view>
     </div>
 </template>
@@ -95,6 +96,16 @@ export default {
 
             // you can also use array splice to update a particular item in the array if you know its index
             this.workshop.sessions = this.workshop.sessions.map(s => s.id === id ? updatedSession : s);
+        },
+        addSession({ session }) {
+            // Vue cannnot detect change to an array property (like session) within the reactive data (i.e. workshops)
+            this.workshop.sessions.push(session);
+
+            // we can overcome this problem by setting sessions property to a new array with the new session
+            // this.workshop.sessions = [
+            //     ...this.workshop.sessions,
+            //     session
+            // ];
         }
     },
     mounted() {

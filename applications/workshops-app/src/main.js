@@ -31,7 +31,7 @@ Vue.use(IconsPlugin)
 // add routing functionality
 Vue.use(VueRouter);
 
-// add for, validation functionality
+// add validation functionality
 Vue.use(Vuelidate);
 
 Vue.component('PolarisPagination', PolarisPagination);

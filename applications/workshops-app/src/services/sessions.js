@@ -8,6 +8,21 @@ const vote = async (sessionId, voteType) => {
     return response.data;
 };
 
+const requestNewSession = async (session) => {
+    const response = await axios.post(
+        `/sessions`,
+        session,
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    );
+
+    return response.data; // new session object (includes the auto-generated id, ...)
+};
+
 export {
-    vote
+    vote,
+    requestNewSession
 };
