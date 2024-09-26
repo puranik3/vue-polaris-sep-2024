@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script>
+
+        <script>
+            const { ref, onMounted, onUnmounted } = Vue;
+
+            // "composables" - functions that have shared functionality of components - they will use some of the composition APIs
+            // - they may
+            //      - share data
+            //      - share methods
+            //      - share computed
+            //      - setup common lifecycle methods
+            //      - setup common watchers
+            function useMouse() {
+                const x = ref(0);
+                const y = ref(0);
+
+                function onMousemove(event) {
+                    x.value = event.pageX;
+                    y.value = event.pageY;
+                }
+
+                // created() equivalent -> just write code directly inside setup
+
+                // mounted() { ... }
+                onMounted(() => {
+                    window.addEventListener("mousemove", onMousemove);
+                });
+
+                onUnmounted(() => {
+                    window.removeEventListener("mousemove", onMousemove);
+                });
+
+                return {
+                    x,
+                    y,
+                };
+            }
+
+            const TrackMouseMove = {
+                name: "TrackMouseMove",
+                setup() {
+                    return useMouse();
+                },
+                template: `
+                    <div class="container my-5">
+                        Mouse is at {{ x }} {{ y }}
+                    </div>
+                `,
+
+                // data() {
+                //     return {
+                //         x: 0,
+                //         y: 0,
+                //     };
+                // },
+                // methods: {
+                //     onMousemove() {
+                //
+                //     }
+                // },
+                // mounted() {
+                //     window.addEventListener('', ___)
+                // },
+                // unmounted() {
+
+                // },
+
+                // alternative in Options API for code scharing is mixins
+                // mixins: [
+                //     MousemoveMixin
+                // ],
+            };
+
+            const PaintApp = {
+                name: "PaintApp",
+                setup() {
+                    // let us say this component already has x, y data variables that are for some other purpose
+                    // NOTE : These are not reactive
+                    const x = "old position x",
+                        y = "old position y";
+
+                    // no problem - we can rename!
+                    const { x: pageX, y: pageY } = useMouse();
+
+                    return {
+                        pageX,
+                        pageY,
+                        x,
+                        y,
+                    };
+                },
+                template: `
+                    <div style="position: relative; margin: 40px; width: 100%; height: calc( 100vh - 160px ); border: 1px solid black;">
+                        <span style="position: absolute; bottom: 8px; right: 8px; background-color: #eee; text-align: center;">
+                            ( {{ pageX }}, {{ pageY }} )
+                        </span>
+                        <span>
+                            ( {{ x }}, {{ y }} )
+                        </span>
+                    </div>
+                `,
+            };
+
+            const root = Vue.createApp({
+                components: {
+                    TrackMouseMove,
+                    PaintApp,
+                },
+                template: `
+                    <div>
+                        <track-mouse-move></track-mouse-move>
+                        <paint-app></paint-app>
+                    </div>
+                `,
+            });
+
+            root.mount("#app");
+        </script>
+    </body>
+</html>
