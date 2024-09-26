@@ -20,24 +20,13 @@
                 name: "FaqQuestion", // helps us identify the component instances in the component hierarchy shown in Vue developer tools
                 props: ["question"],
                 inject: {
-                    globalTheme: {
+                    theme: {
                         from: "theme",
                         default: "light",
-                    },
-                    getTheme: {
-                        from: "getTheme",
-                    },
-                    setTheme: {
-                        from: "setTheme",
                     },
                     showValue: {
                         from: "showValue",
                         default: false,
-                    },
-                },
-                computed: {
-                    theme() {
-                        return this.getTheme();
                     },
                 },
                 methods: {
@@ -49,30 +38,14 @@
                     },
                 },
                 template: `
-                    <div>
-                        <!--
-                        <div
-                            class="p-3"
-                            :class="'bg-' + ( theme.value === 'light' ? 'dark' : 'light' ) + ' text-' + theme.value"
-                            @click="toggle"
-                        >
-                            {{ question }}
+                    <div
+                        class="p-3 bg-dark text-light"
+                        @click="toggle"
+                    >
+                        {{ question }}
 
-                            <div>theme is - {{ theme.value }}</div>
-                            <div>showValue is - {{ showValue.value }}</div>
-                        </div>
-                        -->
-                        <div
-                            class="p-3"
-                            :class="'bg-' + ( globalTheme === 'light' ? 'dark' : 'light' ) + ' text-' + theme"
-                            @click="toggle"
-                        >
-                            <button @click="globalTheme='dark'">Change theme</button>
-                            {{ question }}
-
-                            <div>theme is - {{ theme }}</div>
-                            <div>showValue is - {{ showValue.value }}</div>
-                        </div>
+                        <div>theme is - {{ theme.value }}</div>
+                        <div>showValue is - {{ showValue.value }}</div>
                     </div>
                 `,
             };
@@ -86,41 +59,21 @@
                         from: "theme",
                         // default: "light",
                     },
-                    getTheme: {
-                        from: "getTheme",
-                    },
-                    setTheme: {
-                        from: "setTheme",
-                    },
                     showValue: {
                         from: "show",
                         default: false,
                     },
                 },
                 props: ["answer", "show"],
-                computed: {
-                    theme() {
-                        return this.getTheme();
-                    },
-                },
                 template: `
                     <div>
-                        <!--
-                        <div>
-                            <div class="p-3" v-show="show">{{ answer }}</div>
-                            <div>theme is - {{ theme.value }}</div>
-                            <div>showValue is - {{ showValue.value }}</div>
-                        </div>
-                        -->
-                        <div>
-                            <div class="p-3" v-show="show">{{ answer }}</div>
-                            <div>theme is - {{ theme }}</div>
-                            <div>showValue is - {{ showValue.value }}</div>
-                        </div>
+                        <div class="p-3" v-show="show">{{ answer }}</div>
+                        <div>theme is - {{ theme.value }}</div>
+                        <div>showValue is - {{ showValue.value }}</div>
                     </div>
                 `,
                 created() {
-                    console.log(this.theme, this.showValue.value);
+                    console.log(this.theme.value, this.showValue.value);
                 },
             };
 
@@ -172,18 +125,10 @@
                 //     theme: "light",
                 // },
                 provide() {
-                    const theme = {};
-                    Object.defineProperty(theme, "value", {
-                        enumerable: true,
-                        get: () => {
-                            return this.theme;
-                        },
-                    });
+                    const theme = Vue.observable({ value: this.theme });
 
                     return {
                         theme,
-                        getTheme: () => this.theme,
-                        setTheme: (v) => (this.theme = theme),
                     };
                 },
                 components: {

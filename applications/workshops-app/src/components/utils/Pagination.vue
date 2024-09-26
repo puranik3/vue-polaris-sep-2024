@@ -1,21 +1,18 @@
-<template lang="js">
+<template lang="html">
     <div>
         <div class="my-3">
-            <slot name="page-number-display" :page="page"></slot>
+            You are viewing page {{ page }}
         </div>
+
         <div>
-            <!-- default slot -->
-            <!-- <slot :page="page" :$emit="$emit"></slot> -->
-            <slot>
-                <button class="btn btn-sm btn-primary mr-2"
-                    @click="$emit('pageChange', { oldPage: page, newPage: page - 1 })">
-                    Previous
-                </button>
-                <button class="btn btn-sm btn-primary mr-2"
-                    @click="$emit('pageChange', { oldPage: page, newPage: page + 1 })">
-                    Next
-                </button>
-            </slot>
+            <button class="btn btn-sm btn-primary mr-2"
+                @click="$emit('pageChange', { oldPage: page, newPage: page - 1 })">
+                Previous
+            </button>
+            <button class="btn btn-sm btn-primary mr-2"
+                @click="$emit('pageChange', { oldPage: page, newPage: page + 1 })">
+                Next
+            </button>
         </div>
     </div>
 </template>
@@ -31,7 +28,7 @@ export default {
                 return value > 0 && parseInt(value) === value;
             }
         },
-    }
+    },
 }
 </script>
 

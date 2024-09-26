@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import { BootstrapVue, IconsPlugin, BIcon, BIconHandThumbsDown, BIconHandThumbsUp } from 'bootstrap-vue'
 import VueRouter from 'vue-router';
+import Vuelidate from 'vuelidate';
 import router from './routes'
 
 // switch to this for the original one
@@ -29,6 +30,9 @@ Vue.use(IconsPlugin)
 
 // add routing functionality
 Vue.use(VueRouter);
+
+// add for, validation functionality
+Vue.use(Vuelidate);
 
 Vue.component('PolarisPagination', PolarisPagination);
 

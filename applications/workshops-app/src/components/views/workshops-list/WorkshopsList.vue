@@ -3,6 +3,14 @@
         <h1>List of workshops</h1>
         <hr />
 
+        <app-pagination :page="page" @pageChange="page = $event.newPage">
+        </app-pagination>
+
+        <div class="my-3">
+            <input type="search" placeholder="Filter by name of the workshop" class="form-control"
+                v-model="filterKey" />
+        </div>
+
         <div v-if="loading">
             <app-spinner theme="primary"></app-spinner>
         </div>
@@ -12,22 +20,6 @@
         </div>
 
         <div class="row" v-else>
-            <div class="col-12">
-                <app-pagination @pageChange="page = $event.newPage">
-                    <!-- v-slot:page-number-display="{ page }" -> you have accepted to use the child component's page variable, not the local one -->
-                    <template v-slot:page-number-display="{ page }">
-                        You are viewing page {{ page }}
-                    </template>
-                </app-pagination>
-            </div>
-
-            <div class="col-12 my-3">
-                <input type="search" placeholder="Filter by name of the workshop" class="form-control"
-                    v-model="filterKey" />
-            </div>
-
-            <!-- "key" should be unique among the items in that array, and should be stable (cannot be updated) -->
-
             <div class="col-12 col-md-4 d-flex my-3" v-for="workshop of filteredWorkshops" :key="workshop.id">
                 <app-workshops-list-item :workshop="workshop"></app-workshops-list-item>
             </div>
