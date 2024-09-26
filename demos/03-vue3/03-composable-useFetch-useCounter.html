@@ -18,7 +18,7 @@
         <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.js"></script>
 
         <script>
-            const { onMounted, reactive, ref, toRefs } = Vue;
+            const { onMounted, reactive, ref, toRefs, watch } = Vue;
 
             const getWorkshops = async (page = 1) => {
                 const response = await axios.get(
@@ -36,7 +36,7 @@
             const WorkshopsList = {
                 name: "WorkshopsList",
                 setup() {
-                    // data
+                    // --- data ---
                     const state = reactive({
                         loading: true,
                         error: null,
@@ -45,15 +45,11 @@
 
                     const page = ref(1);
 
-                    // lifecycle methods
-
-                    // created (if you want to use)
-                    // await getWorkshops() // this will work in SFC as well
-
-                    // mounted (what we choose to use instead of created)
-                    onMounted(async () => {
+                    // --- methods ---
+                    // Methods are defined directly within setup function
+                    const fetchWorkshops = async () => {
                         try {
-                            const workshops = await getWorkshops();
+                            const workshops = await getWorkshops(page.value);
 
                             // update data
                             // observe that for data created using reactive(), there is no ".value" used to refer to or update the value
@@ -63,7 +59,35 @@
                         } finally {
                             state.loading = false;
                         }
-                    });
+                    };
+
+                    const previous = () => {
+                        --page.value;
+                    };
+
+                    const next = () => {
+                        ++page.value;
+                    };
+
+                    // --- lifecycle methods ---
+
+                    // created (if you want to use)
+                    // await getWorkshops() // this will work in SFC as well
+
+                    // mounted (what we choose to use instead of created)
+                    onMounted(fetchWorkshops);
+
+                    // -- watchers ---
+                    // watching data changes using composition API
+                    // newValues -> [ newPage, newX, newY ]
+                    // oldValue -> [ oldPage, oldX, oldY ]
+                    // Note: May be oldX === newX -> true (but at least one of page, x, y would have changed)
+                    // watch( [ page, x, y ], (newValues, oldValue) => {
+                    // ...
+                    // });
+
+                    // we want to watch only 1 value -> page
+                    watch(page, fetchWorkshops);
 
                     // this wont work - when we destructure - the individual pieces ie. loading, error, workshops are not reactive - UI wont update
                     // const { loading, error, workshops } = state;
@@ -81,6 +105,8 @@
                         error, // ...
                         workshops, // ...
                         page, // ref
+                        previous,
+                        next,
                     };
                 },
                 template: `
@@ -93,6 +119,8 @@
                             {{ error.message }}
                         </div>
                         <div v-else>
+                            <button class="btn btn-sm btn-primary" @click="previous">Previous</button>
+                            <button class="btn btn-sm btn-primary" @click="next">Next</button>
                             <ul>
                                 <li v-for="workshop of workshops" :key="workshop.id">
                                     {{ workshop.name }}
