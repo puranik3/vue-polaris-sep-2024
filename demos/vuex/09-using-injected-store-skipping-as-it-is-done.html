@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Vue Demo Template</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+        />
         <style>
             .value {
                 display: inline-block;
@@ -24,68 +27,77 @@
         <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.js"></script>
 
         <script type="module">
-            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
-            import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
+            import Vue from "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
+            import Vuex from "https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js";
 
-            Vue.use( Vuex );
+            Vue.use(Vuex);
 
             let store = new Vuex.Store({
                 state: {
                     processing: false,
                     workshops: [],
-                    error: null
+                    error: null,
                 },
                 getters: {
-                    numWorkshops( state ) {
+                    numWorkshops(state) {
                         return {
                             any: state.workshops.length,
-                            online: state.workshops.filter( workshop => workshop.modes.online ).length,
-                            inPerson: state.workshops.filter( workshop => workshop.modes.inPerson ).length
+                            online: state.workshops.filter(
+                                (workshop) => workshop.modes.online
+                            ).length,
+                            inPerson: state.workshops.filter(
+                                (workshop) => workshop.modes.inPerson
+                            ).length,
                         };
                     },
-                    workshopsWithMode( state ) {
-                        return function( mode ) {
-                            if( mode === 'any' ) {
+                    workshopsWithMode(state) {
+                        return function (mode) {
+                            if (mode === "any") {
                                 return state.workshops;
                             } else {
-                                return state.workshops.filter( workshop => workshop.modes[mode] );
+                                return state.workshops.filter(
+                                    (workshop) => workshop.modes[mode]
+                                );
                             }
                         };
-                    }
+                    },
                 },
                 mutations: {
-                    workshops( state, payload ) {
+                    workshops(state, payload) {
                         state.workshops = payload;
                     },
-                    error( state, payload ) {
+                    error(state, payload) {
                         state.error = payload;
                     },
-                    processing( state, payload ) {
+                    processing(state, payload) {
                         state.processing = payload;
-                    }
+                    },
                 },
                 actions: {
-                    fetchWorkshops( context, payload ) {
-                        context.commit( 'processing', true );
+                    fetchWorkshops(context, payload) {
+                        context.commit("processing", true);
 
-                        return axios.get( `http://workshops-server.herokuapp.com/workshops` )
-                                    .then( response => response.data )
-                                    .then( workshops => {
-                                        context.commit( 'workshops', workshops );
-                                        context.commit( 'processing', false );
+                        return axios
+                            .get(
+                                `https://workshops-server.onrender.com/workshops`
+                            )
+                            .then((response) => response.data)
+                            .then((workshops) => {
+                                context.commit("workshops", workshops);
+                                context.commit("processing", false);
 
-                                        return workshops;
-                                    })
-                                    .catch( error => {
-                                        context.commit( 'error', error );
-                                        context.commit( 'processing', false );
+                                return workshops;
+                            })
+                            .catch((error) => {
+                                context.commit("error", error);
+                                context.commit("processing", false);
 
-                                        throw error;
-                                    });
-                    }
-                }
+                                throw error;
+                            });
+                    },
+                },
             });
-            
+
             const WorkshopsList = {
                 template: `
                     <div>
@@ -127,7 +139,7 @@
                 `,
                 data() {
                     return {
-                        mode: 'any'
+                        mode: "any",
                     };
                 },
 
@@ -145,32 +157,37 @@
                     numWorkshops() {
                         return store.getters.numWorkshops;
                     },
-                    workshopsWithMode( mode ) {
+                    workshopsWithMode(mode) {
                         return store.getters.workshopsWithMode;
-                    }
+                    },
                 },
                 methods: {
-                    available( workshop, mode ) {
+                    available(workshop, mode) {
                         return {
-                            'badge-success': workshop.modes[mode],
-                            'badge-secondary': !workshop.modes[mode]
-                        }
-                    }
+                            "badge-success": workshop.modes[mode],
+                            "badge-secondary": !workshop.modes[mode],
+                        };
+                    },
                 },
 
                 // Switch to store exposed on the Vue component instance
                 created() {
-                    store.dispatch( 'fetchWorkshops' )
-                         .then( workshops => console.log( 'received : ', workshops ) )
-                         .catch( error => console.log( 'error : ', error.message ) );
-                }
+                    store
+                        .dispatch("fetchWorkshops")
+                        .then((workshops) =>
+                            console.log("received : ", workshops)
+                        )
+                        .catch((error) =>
+                            console.log("error : ", error.message)
+                        );
+                },
             };
 
             // Add a store property to the root Vue instance to expose the store to all components in the app (and this root instance as well)
             new Vue({
-                el: '#app',
+                el: "#app",
                 components: {
-                    WorkshopsList
+                    WorkshopsList,
                 },
                 template: `
                     <div id="app" class="container my-4">

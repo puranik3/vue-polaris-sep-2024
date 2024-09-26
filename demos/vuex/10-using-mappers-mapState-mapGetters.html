@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Vue Demo Template</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+        />
         <style>
             .value {
                 display: inline-block;
@@ -24,74 +27,83 @@
         <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.js"></script>
 
         <script type="module">
-            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
-            import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
+            import Vue from "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
+            import Vuex from "https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js";
 
-            Vue.use( Vuex );
+            Vue.use(Vuex);
 
             let store = new Vuex.Store({
                 state: {
                     processing: false,
                     workshops: [],
-                    error: null
+                    error: null,
                 },
                 getters: {
-                    numWorkshops( state ) {
+                    numWorkshops(state) {
                         return {
                             any: state.workshops.length,
-                            online: state.workshops.filter( workshop => workshop.modes.online ).length,
-                            inPerson: state.workshops.filter( workshop => workshop.modes.inPerson ).length
+                            online: state.workshops.filter(
+                                (workshop) => workshop.modes.online
+                            ).length,
+                            inPerson: state.workshops.filter(
+                                (workshop) => workshop.modes.inPerson
+                            ).length,
                         };
                     },
-                    workshopsWithMode( state ) {
-                        return function( mode ) {
-                            if( mode === 'any' ) {
+                    workshopsWithMode(state) {
+                        return function (mode) {
+                            if (mode === "any") {
                                 return state.workshops;
                             } else {
-                                return state.workshops.filter( workshop => workshop.modes[mode] );
+                                return state.workshops.filter(
+                                    (workshop) => workshop.modes[mode]
+                                );
                             }
                         };
-                    }
+                    },
                 },
                 mutations: {
-                    workshops( state, payload ) {
+                    workshops(state, payload) {
                         state.workshops = payload;
                     },
-                    error( state, payload ) {
+                    error(state, payload) {
                         state.error = payload;
                     },
-                    processing( state, payload ) {
+                    processing(state, payload) {
                         state.processing = payload;
-                    }
+                    },
                 },
                 actions: {
-                    fetchWorkshops( context, payload ) {
-                        context.commit( 'processing', true );
+                    fetchWorkshops(context, payload) {
+                        context.commit("processing", true);
 
-                        return axios.get( `http://workshops-server.herokuapp.com/workshops` )
-                                    .then( response => response.data )
-                                    .then( workshops => {
-                                        context.commit( 'workshops', workshops );
-                                        context.commit( 'processing', false );
+                        return axios
+                            .get(
+                                `https://workshops-server.onrender.com/workshops`
+                            )
+                            .then((response) => response.data)
+                            .then((workshops) => {
+                                context.commit("workshops", workshops);
+                                context.commit("processing", false);
 
-                                        return workshops;
-                                    })
-                                    .catch( error => {
-                                        context.commit( 'error', error );
-                                        context.commit( 'processing', false );
+                                return workshops;
+                            })
+                            .catch((error) => {
+                                context.commit("error", error);
+                                context.commit("processing", false);
 
-                                        throw error;
-                                    });
-                    }
-                }
+                                throw error;
+                            });
+                    },
+                },
             });
-            
+
             const WorkshopsList = {
                 template: `
                     <div>
                         <h1>List of workshops</h1>
                         <hr />
-                        <div class="alert alert-info" role="alert" v-if="processing">
+                        <div class="alert alert-info" role="alert" v-if="isProcessing">
                             <strong>We are fetching workshops...Hang on!</strong>
                         </div>
                         <div v-else>
@@ -127,41 +139,51 @@
                 `,
                 data() {
                     return {
-                        mode: 'any'
+                        mode: "any",
                     };
                 },
 
                 // Use mapState and mapGetters to create computed properties that expose Vuex state
                 computed: {
-                    
-                    // Vuex.mapState()
-                    // Object form (more general as computed property is decided by you, and local state can be used as well in computation) - Expose processing by mapping to a string / function that gets state
-                    // Array form (not customizable) - Expose workshops and error using the array form
-                    
-                    // Vuex.mapGetters() - works similar to mapState() but for getters
-                    // Expose numWorkshops and workshopsWithMode
-                    
+                    // Array form is helpful if you want to lend same name to local computed property (same as the state property)
+                    ...Vuex.mapState(["workshops", "error"]),
+
+                    // Object form is helpful if you want to rename the local computed property (going to be different from the state property)
+                    ...Vuex.mapState({
+                        isProcessing: "processing",
+                    }),
+
+                    // same concept for getters
+                    ...Vuex.mapGetters(["numWorkshops", "workshopsWithMode"]),
                 },
                 methods: {
-                    available( workshop, mode ) {
+                    available(workshop, mode) {
                         return {
-                            'badge-success': workshop.modes[mode],
-                            'badge-secondary': !workshop.modes[mode]
-                        }
-                    }
+                            "badge-success": workshop.modes[mode],
+                            "badge-secondary": !workshop.modes[mode],
+                        };
+                    },
                 },
                 created() {
-                    this.$store.dispatch( 'fetchWorkshops' )
-                         .then( workshops => console.log( 'received : ', workshops ) )
-                         .catch( error => console.log( 'error : ', error.message ) );
-                }
+                    this.$store
+                        .dispatch("fetchWorkshops")
+                        .then((workshops) =>
+                            console.log("received : ", workshops)
+                        )
+                        .catch((error) =>
+                            console.log("error : ", error.message)
+                        );
+                },
             };
 
+            // what should go inside computed() in order to extract state properties from the store
+            // console.log(Vuex.mapState(["processing", "error"]));
+
             new Vue({
-                el: '#app',
+                el: "#app",
                 store,
                 components: {
-                    WorkshopsList
+                    WorkshopsList,
                 },
                 template: `
                     <div id="app" class="container my-4">
