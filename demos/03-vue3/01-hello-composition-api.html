@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script>
+
+        <script>
+            // in a normal application setup
+            // import { ref } from 'vue';
+
+            // when we include a script like above..
+            const { ref } = Vue;
+
+            const root = Vue.createApp({
+                setup() {
+                    // creating data...
+                    // ref() - generally for primitive value -> number, boolean, string
+                    // reactive() - generally for objects
+
+                    // const value = 0;
+                    const counter = ref(0); // counter -> { value: 0 } which is reactive, i.e. the value updates will cause the view to update
+
+                    // const decrement = () => {
+
+                    // }
+
+                    function decrement() {
+                        --counter.value;
+                    }
+
+                    function increment() {
+                        ++counter.value;
+                    }
+
+                    // the setup function must return all that you need to make use of in the template
+                    return {
+                        counter,
+                        decrement,
+                        increment,
+                    };
+                },
+                template: `
+                    <div class="container my-5">
+                        <button @click="decrement" class="btn btn-sm btn-primary">-</button>
+                        {{ counter }}
+                         <button @click="increment" class="btn btn-sm btn-primary">+</button>
+                    </div>
+                `,
+            });
+
+            root.mount("#app");
+        </script>
+    </body>
+</html>
