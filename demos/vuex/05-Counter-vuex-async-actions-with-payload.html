@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Vue Demo Template</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+        />
         <style>
             .value {
                 display: inline-block;
@@ -22,51 +25,51 @@
         <div id="app"></div>
 
         <script type="module">
-            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
-            import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
+            import Vue from "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
+            import Vuex from "https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js";
 
-            Vue.use( Vuex );
+            Vue.use(Vuex);
 
             const store = new Vuex.Store({
                 state: {
                     processing: false,
-                    value: 0
+                    value: 0,
                 },
 
                 // Take value to increment/decrement by as payload (second argument), and modify the methods accordingly
                 mutations: {
-                    increment( state ) {
-                        state.value++;
+                    increment(state, payload) {
+                        state.value += payload;
                     },
-                    decrement( state ) {
-                        state.value--;
+                    decrement(state, payload) {
+                        state.value -= payload;
                     },
-                    setProcessing( state, payload ) {
+                    setProcessing(state, payload) {
                         state.processing = payload;
-                    }
+                    },
                 },
 
                 // Take value to increment/decrement by as payload (second argument), and modify the actions accordingly
                 actions: {
-                    increment( context ) {
-                        context.commit( 'setProcessing', true );
+                    increment(context, payload) {
+                        context.commit("setProcessing", true);
 
                         setTimeout(() => {
-                            context.commit( 'increment' );
-                            context.commit( 'setProcessing', false );
+                            context.commit("increment", payload);
+                            context.commit("setProcessing", false);
                         }, 2000);
                     },
-                    decrement( context ) {
-                        context.commit( 'setProcessing', true );
+                    decrement(context, payload) {
+                        context.commit("setProcessing", true);
 
                         setTimeout(() => {
-                            context.commit( 'decrement' );
-                            context.commit( 'setProcessing', false );
+                            context.commit("decrement", payload);
+                            context.commit("setProcessing", false);
                         }, 2000);
-                    }
-                }
+                    },
+                },
             });
-            
+
             const Counter = {
                 // NOTE: We have added the input to accept changeAmount
                 template: `
@@ -89,7 +92,7 @@
                 // NOTE: We have added changeAmount as data
                 data() {
                     return {
-                        changeAmount: 1
+                        changeAmount: 1,
                     };
                 },
                 computed: {
@@ -98,24 +101,24 @@
                     },
                     processing() {
                         return store.state.processing;
-                    }
+                    },
                 },
 
                 // Modify methods to pass payload
                 methods: {
                     increment() {
-                        store.dispatch( 'increment' );
+                        store.dispatch("increment", this.changeAmount);
                     },
                     decrement() {
-                        store.dispatch( 'decrement' );
-                    }
-                }
+                        store.dispatch("decrement", this.changeAmount);
+                    },
+                },
             };
 
             new Vue({
-                el: '#app',
+                el: "#app",
                 components: {
-                    Counter
+                    Counter,
                 },
                 template: `
                     <div id="app" class="container my-4">
