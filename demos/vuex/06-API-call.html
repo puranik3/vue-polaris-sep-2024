@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Vue Demo Template</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+        />
         <style>
             .value {
                 display: inline-block;
@@ -24,74 +27,118 @@
         <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.js"></script>
 
         <script type="module">
-            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
-            import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
+            import Vue from "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
+            import Vuex from "https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js";
 
-            function fetchWorkshops() {
-                return axios.get( `http://workshops-server.herokuapp.com/workshops` )
-                            .then( response => response.data );
+            async function getWorkshops() {
+                const response = await axios.get(
+                    `https://workshops-server.onrender.com/workshops`
+                );
+                return response.data;
             }
 
-            Vue.use( Vuex );
-
+            Vue.use(Vuex);
 
             // Define a store
             // Add appropriate state properties
             // Add necessary mutations (that accept payload)
             // Add an action, say fetchWorkshops, that fetches workshops and returns a promise
-            
+            const store = new Vuex.Store({
+                state: {
+                    workshops: [],
+                    loading: false,
+                    error: null,
+                },
+                mutations: {
+                    startFetching(state) {
+                        state.loading = true;
+                    },
+                    fetchSuccess(state, payload) {
+                        state.workshops = payload;
+                        state.loading = false;
+                    },
+                    fetchFailed(state, payload) {
+                        state.error = payload;
+                        state.loading = false;
+                    },
+                },
+                actions: {
+                    async fetchWorkshops(context) {
+                        context.commit("startFetching");
+                        context.commit("error", null);
+
+                        try {
+                            const workshops = await getWorkshops();
+                            context.commit("fetchSuccess", workshops);
+                        } catch (error) {
+                            context.commit("fetchFailed", error);
+                        }
+                    },
+                },
+            });
 
             const WorkshopsList = {
                 template: `
                     <div>
                         <h1>List of workshops</h1>
                         <hr />
-                        <div class="alert alert-info" role="alert" v-if="processing">
+                        <div class="alert alert-info" role="alert" v-if="loading">
                             <strong>We are fetching workshops...Hang on!</strong>
                         </div>
-                        <div v-else>
-                            
-                            <!-- Setup binding to show error message on error / workshops on success -->
-                            
+                        <div v-else-if="!loading && error !== null">
                             <div class="alert alert-danger" role="alert">
-                                <strong><!-- Error message goes in here --></strong>
+                                <strong>{{ error.message }}</strong>
                             </div>
-                            <ul class="list-group" v-else>
-                                <li class="list-group-item clearfix">
-                                    <!-- Name of workshop goes in here -->
+                        </div>
+                        <div v-else>
+                            <ul class="list-group">
+                                <li class="list-group-item clearfix" v-for="workshop of workshops" :key="workshop.id">
+                                    <h2 class="h4">{{ workshop.name }}</h2>
                                     <div class="float-right">
-                                        <!-- Set style using the available() helper --> 
-                                        <span class="badge">Online</span>
-                                        <span class="badge">In-person</span>
+                                        <!-- Set style using the available() helper -->
+                                        <span class="badge" :class="available(workshop, 'online')">Online</span>
+                                        <span class="badge" :class="available(workshop, 'inPerson')">In-person</span>
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 `,
-                
+
                 // Set up computed properties
-                
+                computed: {
+                    loading() {
+                        return this.$store.state.loading;
+                    },
+                    workshops() {
+                        return this.$store.state.workshops;
+                    },
+                    error() {
+                        return this.$store.state.error;
+                    },
+                },
+
                 // Helper method for styling the mode display of a workshop
                 methods: {
-                    available( workshop, mode ) {
+                    available(workshop, mode) {
                         return {
-                            'badge-success': workshop.modes[mode],
-                            'badge-secondary': !workshop.modes[mode]
-                        }
-                    }
+                            "badge-success": workshop.modes[mode],
+                            "badge-secondary": !workshop.modes[mode],
+                        };
+                    },
                 },
-                
+
                 created() {
                     // Dispatch fetchWorkshops action -> log on success and error
-                    
-                }
+                    this.$store.dispatch("fetchWorkshops");
+                },
             };
 
             new Vue({
-                el: '#app',
+                el: "#app",
+                store,
                 components: {
-                    WorkshopsList
+                    WorkshopsList,
                 },
                 template: `
                     <div id="app" class="container my-4">

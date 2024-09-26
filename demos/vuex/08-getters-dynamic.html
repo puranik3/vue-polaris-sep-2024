@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Vue Demo Template</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+        />
         <style>
             .value {
                 display: inline-block;
@@ -24,61 +27,73 @@
         <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.js"></script>
 
         <script type="module">
-            import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
-            import Vuex from 'https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js';
+            import Vue from "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
+            import Vuex from "https://cdn.jsdelivr.net/npm/vuex@3.6.2/dist/vuex.esm.browser.js";
 
-            Vue.use( Vuex );
+            Vue.use(Vuex);
 
             const store = new Vuex.Store({
                 state: {
                     processing: false,
                     workshops: [],
-                    error: null
+                    error: null,
                 },
 
                 // Define a workshopsWithMode getter (dynamic getter that accepts a mode - 'any' |'online' | 'inPerson', and returns the number of workshops for the mode). Use it in numWorkshops.
                 getters: {
-                    numWorkshops( state, getters ) {
-                        return {
-                            any: state.workshops.length,
-                            online: state.workshops.filter( workshop => workshop.modes.online ).length,
-                            inPerson: state.workshops.filter( workshop => workshop.modes.inPerson ).length
+                    numWorkshops(state, getters) {
+                        return (mode) => {
+                            return getters.workshopsWithMode(mode).length;
                         };
-                    }
+                    },
+                    workshopsWithMode(state, getters) {
+                        return (mode) => {
+                            if (mode === "any") {
+                                return state.workshops;
+                            } else {
+                                return state.workshops.filter(
+                                    (w) => w.modes[mode]
+                                );
+                            }
+                        };
+                    },
                 },
                 mutations: {
-                    workshops( state, payload ) {
+                    workshops(state, payload) {
                         state.workshops = payload;
                     },
-                    error( state, payload ) {
+                    error(state, payload) {
                         state.error = payload;
                     },
-                    processing( state, payload ) {
+                    processing(state, payload) {
                         state.processing = payload;
-                    }
+                    },
                 },
                 actions: {
-                    fetchWorkshops( context, payload ) {
-                        context.commit( 'processing', true );
+                    fetchWorkshops(context, payload) {
+                        context.commit("processing", true);
 
-                        return axios.get( `http://workshops-server.herokuapp.com/workshops` )
-                                    .then( response => response.data )
-                                    .then( workshops => {
-                                        context.commit( 'workshops', workshops );
-                                        context.commit( 'processing', false );
+                        return axios
+                            .get(
+                                `https://workshops-server.onrender.com/workshops`
+                            )
+                            .then((response) => response.data)
+                            .then((workshops) => {
+                                context.commit("workshops", workshops);
+                                context.commit("processing", false);
 
-                                        return workshops;
-                                    })
-                                    .catch( error => {
-                                        context.commit( 'error', error );
-                                        context.commit( 'processing', false );
+                                return workshops;
+                            })
+                            .catch((error) => {
+                                context.commit("error", error);
+                                context.commit("processing", false);
 
-                                        throw error;
-                                    });
-                    }
-                }
+                                throw error;
+                            });
+                    },
+                },
             });
-            
+
             const WorkshopsList = {
                 template: `
                     <div>
@@ -93,14 +108,14 @@
                             </div>
                             <div v-else>
                                 <div class="text-center text-muted text-small mb-2">
-                                    <small class="mr-2">Total: {{numWorkshops.any}}</small>
-                                    <small class="mr-2">Online: {{numWorkshops.online}}</small>
-                                    <small>In-person: {{numWorkshops.inPerson}}</small>
+                                    <small class="mr-2">Total: {{numWorkshops( 'any' )}}</small>
+                                    <small class="mr-2">Online: {{numWorkshops( 'online' )}}</small>
+                                    <small>In-person: {{numWorkshops( 'inPerson' )}}</small>
                                 </div>
 
                                 <!-- Add a select to set data property mode -->
                                 <div class="text-center mb-2">
-                                    <select>
+                                    <select v-model="mode">
                                         <option value="" disabled>-- Filter by mode --</option>
                                         <option value="any">Any</option>
                                         <option value="online">Online</option>
@@ -108,11 +123,15 @@
                                     </select>
                                 </div>
 
-                                <!-- 
+                                <!--
                                     Display workshops for selected mode -> filter workshops using workshopsWithMode
                                 -->
                                 <ul class="list-group">
-                                    <li class="list-group-item clearfix">
+                                    <li
+                                        class="list-group-item clearfix"
+                                        v-for="workshop of workshopsWithMode"
+                                        :key="workshop.id"
+                                    >
                                         {{workshop.name}}
                                         <div class="float-right">
                                             <span class="badge" :class="available( workshop, 'online' )">Online</span>
@@ -126,7 +145,11 @@
                 `,
 
                 // Add a data property - mode, to hold current mode for which workshops are to be shown - by default it should be 'any'
-                
+                data() {
+                    return {
+                        mode: "any",
+                    };
+                },
 
                 // Add a computed workshopsWithMode
                 computed: {
@@ -141,27 +164,36 @@
                     },
                     numWorkshops() {
                         return store.getters.numWorkshops;
-                    }
+                    },
+                    workshopsWithMode() {
+                        // we will call the dynamic getter when mode changes. So we get the filtered array...
+                        return store.getters.workshopsWithMode(this.mode);
+                    },
                 },
                 methods: {
-                    available( workshop, mode ) {
+                    available(workshop, mode) {
                         return {
-                            'badge-success': workshop.modes[mode],
-                            'badge-secondary': !workshop.modes[mode]
-                        }
-                    }
+                            "badge-success": workshop.modes[mode],
+                            "badge-secondary": !workshop.modes[mode],
+                        };
+                    },
                 },
                 created() {
-                    store.dispatch( 'fetchWorkshops' )
-                         .then( workshops => console.log( 'received : ', workshops ) )
-                         .catch( error => console.log( 'error : ', error.message ) );
-                }
+                    store
+                        .dispatch("fetchWorkshops")
+                        .then((workshops) =>
+                            console.log("received : ", workshops)
+                        )
+                        .catch((error) =>
+                            console.log("error : ", error.message)
+                        );
+                },
             };
 
             new Vue({
-                el: '#app',
+                el: "#app",
                 components: {
-                    WorkshopsList
+                    WorkshopsList,
                 },
                 template: `
                     <div id="app" class="container my-4">
