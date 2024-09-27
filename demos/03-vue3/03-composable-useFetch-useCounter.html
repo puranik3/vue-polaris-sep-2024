@@ -18,7 +18,7 @@
         <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.js"></script>
 
         <script>
-            const { onMounted, reactive, ref, toRefs, watch } = Vue;
+            const { computed, onMounted, reactive, ref, toRefs, watch } = Vue;
 
             const getWorkshops = async (page = 1) => {
                 const response = await axios.get(
@@ -126,6 +126,11 @@
                     // Note that we provide the reactive variable and not with ".value"
                     watch(page, fetchData);
 
+                    
+                    const pageInfo = computed(() => {
+                        return `You are viewing page ${page.value}`;
+                    });
+
                     // expose these to the template using state created using reactive()... - works
                     // return {
                     //     state,
@@ -138,6 +143,7 @@
                         page, // ref
                         previous,
                         next,
+                        pageInfo,
                     };
                 },
                 // watch: {
@@ -147,7 +153,7 @@
                 // },
                 template: `
                     <div>
-                        <div>You are vewing page {{ page }}</div>
+                        <div>{{ pageInfo }}</div>
                         <div v-if="loading">
                             Loading workshops...
                         </div>

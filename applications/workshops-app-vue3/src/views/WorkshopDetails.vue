@@ -24,6 +24,36 @@
         </v-col>
       </v-row>
     </div>
+
+    <div class="mt-10 mb-3">
+      <v-btn
+        class="pa-2 mb-4 mr-2"
+        color="indigo-darken-3"
+        size="md"
+        variant="flat"
+        :to="{ name: 'sessions-list', params: { id: id } }"
+        exact
+      >
+        List of sessions
+      </v-btn>
+      <v-btn
+        class="pa-2 mb-4 mr-2"
+        color="indigo-darken-3"
+        size="md"
+        variant="flat"
+        :to="{ name: 'request-session', params: { id: id } }"
+      >
+        Request new session
+      </v-btn>
+    </div>
+
+    <!-- <router-view :id="id"></router-view> -->
+    <router-view
+      :sessions="workshop?.sessions"
+      @downvote="voteForSession($event, 'downvote')"
+      @upvote="voteForSession($event, 'upvote')"
+      @sessionAdd="addSession($event)"
+    ></router-view>
   </div>
 </template>
 
@@ -33,6 +63,9 @@ import useFetch from '@/composables/useFetch'
 
 import { getWorkshopById } from '@/services/workshops'
 import type { IWorkshop } from '@/services/workshops'
+
+import { vote } from '@/services/sessions'
+import type { ISession, VoteType } from '@/services/sessions'
 
 interface Props {
   id: string
@@ -50,7 +83,30 @@ const fetcher = async () => {
 }
 
 // like we normally use functions, the composables can be passed arguments for customization
-const { loading, error, data: workshop } = useFetch<IWorkshop>(fetcher, null)
+const {
+  loading,
+  error,
+  data: workshop
+} = useFetch<Required<IWorkshop>>(fetcher, null)
+
+async function voteForSession({ id }: { id: number }, voteType: VoteType) {
+  console.log(voteType, event)
+  const updatedSession = await vote(id, voteType)
+
+  // you can also use array splice to update a particular item in the array if you know its index
+  if (workshop.value !== null) {
+    workshop.value.sessions = workshop.value.sessions.map((s) =>
+      s.id === id ? updatedSession : s
+    )
+  }
+}
+
+function addSession({ session }: { session: ISession }) {
+  if (workshop.value !== null) {
+    // workshop.value.sessions = [...workshop.value.sessions, session]
+    workshop.value.sessions.push(session)
+  }
+}
 </script>
 
 <script lang="ts">

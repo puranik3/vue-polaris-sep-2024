@@ -5,7 +5,7 @@
       <v-card-title>
         <router-link
           :to="{
-            name: 'workshop-details',
+            name: 'sessions-list',
             params: {
               id: workshop.id
             }

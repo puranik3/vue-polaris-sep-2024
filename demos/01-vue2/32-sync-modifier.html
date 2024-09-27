@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script> -->
+
+        <script>
+            const ChildComponent = {
+                name: "ChildComponent",
+                props: {
+                    title: String,
+                },
+                data() {
+                    return {
+                        tempTitle: this.title,
+                    };
+                },
+                template: `
+                    <div>
+                        <div>Title is {{ title }}</div>
+
+                        <div class="mb-3">
+                            <label for="newTitle" class="col-2 form-label col-form-label">New title</label>
+                            <div class="col-10">
+                                <input
+                                    type="text"
+                                    v-model="tempTitle"
+                                    id="newTitle"
+                                    class="form-control"
+                                />
+                            </div>
+                        </div>
+
+                        <button class="btn btn-sm btn-primary" @click="$emit( 'update:title', tempTitle )">Update title</button>
+                    </div>
+
+                `,
+            };
+
+            const ParentComponent = {
+                name: "ParentComponent",
+                components: {
+                    ChildComponent,
+                },
+                data() {
+                    return {
+                        title: "John's Den",
+                    };
+                },
+                template: `
+                    <div>
+                        <!--
+                        <child-component
+                            :title="title"
+                            @update:title="title = $event"
+                        >
+                        -->
+                        <child-component
+                            v-bind:title.sync="title"
+                        >
+                        </child-component>
+                    </div>
+                `,
+            };
+
+            // v2
+            new Vue({
+                el: "#app",
+                components: {
+                    ParentComponent,
+                },
+                // v2 -> either a data object, a function that returns the data object
+                data: {},
+                template: `
+                    <div class="container my-5">
+                        <parent-component></parent-component>
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>

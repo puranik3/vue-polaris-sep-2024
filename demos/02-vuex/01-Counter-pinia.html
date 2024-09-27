@@ -26,23 +26,51 @@
 
         <script>
             // Step 1: Define the Pinia Store
-            // ...
+            const useCounterStore = Pinia.defineStore("counter", {
+                state() {
+                    return {
+                        value: 0,
+                    };
+                },
+                getters: {
+                    doubleValue(state, getters) {
+                        return state.value * 2;
+                    },
+                },
+                actions: {
+                    increment() {
+                        ++this.value;
+                    },
+                    decrement() {
+                        --this.value;
+                    },
+                },
+            });
 
             // Step 2: Setup Pinia in the Vue app
-            // ...
+            Vue.use(Pinia.PiniaVuePlugin);
+            const pinia = Pinia.createPinia();
 
             const Counter = {
                 template: `
                     <div class="counter">
-                        <button @click="decrement" class="btn btn-dark btn-sm">-</button>
-                        <div class="value">valueAnother = {{valueAnother}}</div> | 
-                        <div class="value">value = {{value}}</div> | 
-                        <div class="value">value x 2 = {{doubleValue}}</div>
-                        <button @click="increment" class="btn btn-dark btn-sm">+</button>
+                        <button class="btn btn-dark btn-sm">-</button>
+                        <div class="value">doubleValue = {{doubleValue}}</div> |
+                        <div class="value">value = {{value}}</div> |
+                        <button class="btn btn-dark btn-sm">+</button>
                     </div>
                 `,
                 // Step 3: Define computed properties to extract state from the store
-                // ...
+                computed: {
+                    // ...Pinia.mapState(useCounterStore, ["value"]),
+                    // ...Pinia.mapGetters(useCounterStore, ["doubleValue"]),
+                    value() {
+                        return this.$pinia.state.value.counter?.value;
+                    },
+                    doubleValue() {
+                        return this.$pinia.getters.value.counter?.doubleValue;
+                    },
+                },
                 // Step 4: Define methods to map call of actions of the store
                 // ...
             };
@@ -50,6 +78,8 @@
             new Vue({
                 el: "#app",
                 // Step 5: Add pinia object to share it across the app components
+                // pinia: pinia,
+                pinia,
                 components: {
                     Counter,
                 },

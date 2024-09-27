@@ -5,7 +5,13 @@ import type { ISession } from './sessions'
 
 // console.log(baseUrl);
 
-type Category = 'frontend' | 'backend' | 'database' | 'language' | 'devops' | 'mobile'
+type Category =
+  | 'frontend'
+  | 'backend'
+  | 'database'
+  | 'language'
+  | 'devops'
+  | 'mobile'
 
 interface IWorkshop {
   name: string
@@ -25,7 +31,7 @@ interface IWorkshop {
     online: boolean
   }
   imageUrl: string
-  sessions?: ISession
+  sessions?: ISession[]
 }
 
 // using fetch - we have not handled error using catch - whoever calls getWorkshops() will handle the error (if any)
