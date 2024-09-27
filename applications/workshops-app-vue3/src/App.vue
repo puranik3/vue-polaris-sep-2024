@@ -1,8 +1,9 @@
 <template>
   <app-menu></app-menu>
 
-  <router-view></router-view>
-  <v-container> </v-container>
+  <v-container>
+    <router-view />
+  </v-container>
 </template>
 
 <script setup lang="ts">
@@ -16,4 +17,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style>
+body {
+  text-align: left !important;
+}
+</style>
