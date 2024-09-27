@@ -2,7 +2,18 @@
   <v-card class="w-100 pa-6">
     <v-img :height="200" cover :src="workshop.imageUrl" :alt="workshop.name" contain />
     <v-card-item>
-      <v-card-title>{{ workshop.name }}</v-card-title>
+      <v-card-title>
+        <router-link
+          :to="{
+            name: 'workshop-details',
+            params: {
+              id: workshop.id
+            }
+          }"
+        >
+          {{ workshop.name }}
+        </router-link>
+      </v-card-title>
 
       <v-card-subtitle>
         <div>{{ workshop.startDate }} - {{ workshop.endDate }}</div>
@@ -22,6 +33,7 @@ export default defineComponent({
   name: 'WorkshopsListItem',
   props: {
     workshop: {
+      required: true,
       type: Object as PropType<IWorkshop>
     }
   }

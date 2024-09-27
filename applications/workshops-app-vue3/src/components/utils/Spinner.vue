@@ -1,22 +1,22 @@
 <template lang="">
   <div class="d-flex justify-content-center mb-3">
-    <v-progress-circular color="red" indeterminate></v-progress-circular>
+    <v-progress-circular :color="props.settings.color" indeterminate></v-progress-circular>
   </div>
 </template>
 
 <script setup lang="ts">
-import useColorProp from '@/composables/useColorProp'
-const { props } = useColorProp()
-</script>
+// import useColorProp from '@/composables/useColorProp'
+import { defineProps } from 'vue'
 
-<script lang="ts">
-// import ThemeMixin from '@/mixins/ThemeMixin'
+type Color = string // restrict colors if needed like 'red' | 'green'
 
-export default {
-  name: 'AppSpinner'
-  // the ThemeMixin will bring in the theme prop
-  //   mixins: [ThemeMixin]
+interface Props {
+  settings: { color: Color }
 }
+
+const props = defineProps<Props>()
+
+console.log(props)
 </script>
 
 <style lang=""></style>

@@ -1,13 +1,18 @@
 <template>
   <nav class="nav">
     <div>
-      <router-link class="link" v-for="item of items" :key="item.text" :to="item.to">{{
-        item.text
-      }}</router-link>
+      <router-link
+        class="link"
+        active-class="link-active"
+        v-for="item of items"
+        :key="item.text"
+        :to="item.to"
+        >{{ item.text }}</router-link
+      >
     </div>
     <div>
       <span to="#" class="link">Change theme</span>
-      <router-link to="#" class="link">Login</router-link>
+      <router-link to="#" class="link" active-class="link-active">Login</router-link>
     </div>
   </nav>
 </template>
@@ -52,12 +57,22 @@ export default {
 .nav {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 
   padding: 20px;
   background-color: #444;
 
+  > * {
+    margin-bottom: 0.25em;
+  }
+
   .link {
-    margin: 10px 20px;
+    margin: 0 20px;
+    text-decoration: none;
+
+    &.link-active {
+      text-decoration: underline;
+    }
   }
 }
 </style>

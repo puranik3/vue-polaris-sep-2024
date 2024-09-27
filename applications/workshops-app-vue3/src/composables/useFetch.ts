@@ -3,7 +3,7 @@ import { onMounted, reactive, toRefs } from 'vue'
 type Fetcher = <DataType>() => Promise<any> // @todo Improve this!
 
 // A composable that fetches data from the given source (using the given `fetcher` function that makes the backend call and returns the data)
-const useFetch = <DataType>(fetcher: Fetcher, initialData: DataType) => {
+const useFetch = <DataType>(fetcher: Fetcher, initialData: DataType | null) => {
   // --- data ---
   const state = reactive({
     loading: true,
