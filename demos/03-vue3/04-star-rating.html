@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+        <style>
+            .circle {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                border: 1px solid black;
+                border-radius: 50%;
+                margin-right: 5px;
+                cursor: pointer;
+            }
+
+            .circle:last-child {
+                margin-right: 0;
+            }
+
+            .circle-filled {
+                background-color: #333;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script>
+
+        <script>
+            const { ref } = Vue;
+
+            const CircleRating = {
+                name: "CircleRating",
+                setup() {
+                    const rating = ref(5);
+
+                    return {
+                        rating,
+                    };
+                },
+                template: `
+                    <div>
+                        <span
+                            class="circle"
+                            :class="n <= rating ? 'circle-filled' : ''"
+                            v-for="n in 5" :key="n"
+                            @click="rating = n"
+                        ></span>
+                    </div>
+                `,
+            };
+
+            const root = Vue.createApp({
+                components: {
+                    CircleRating,
+                },
+                template: `
+                    <div class="container my-5">
+                        <circle-rating></circle-rating>
+                    </div>
+                `,
+            });
+
+            root.mount("#app");
+        </script>
+    </body>
+</html>

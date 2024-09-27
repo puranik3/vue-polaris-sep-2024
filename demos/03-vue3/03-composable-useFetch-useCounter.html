@@ -79,7 +79,7 @@
 
             const WorkshopsList = {
                 name: "WorkshopsList",
-                setup() {
+                setup(props, context) {
                     // --- data ---
                     const page = ref(1);
 
@@ -126,7 +126,6 @@
                     // Note that we provide the reactive variable and not with ".value"
                     watch(page, fetchData);
 
-                    
                     const pageInfo = computed(() => {
                         return `You are viewing page ${page.value}`;
                     });
