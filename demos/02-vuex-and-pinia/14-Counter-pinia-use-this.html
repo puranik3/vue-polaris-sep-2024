@@ -30,6 +30,8 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pinia/2.1.7/pinia.iife.js"></script>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+
         <script>
             const {
                 defineStore,
@@ -38,6 +40,8 @@
                 mapWritableState, // not there in Vuex
                 mapActions,
             } = Pinia;
+
+            const { debounce } = _;
 
             // -- options API way ---
             // Step 1: Define the Pinia Store
@@ -65,6 +69,11 @@
                     increment() {
                         ++this.value;
                     },
+                },
+                debounce: {
+                    // custom option for the custom Plugin
+                    increment: 1000,
+                    decrement: 1000,
                 },
             });
 
@@ -114,6 +123,32 @@
 
             Vue.use(Pinia.PiniaVuePlugin);
             const pinia = Pinia.createPinia();
+
+            // assumes options API for stores which can be passed extra options easily
+            // Adding a plugin (generally used only by libraries)
+            // https://pinia.vuejs.org/core-concepts/plugins.html
+            pinia.use((context) => {
+                const { options, store } = context;
+                console.log(options, store);
+
+                if (options.debounce) {
+                    // we are overriding the actions with new ones
+                    const result = Object.keys(options.debounce).reduce(
+                        (debouncedActions, action) => {
+                            debouncedActions[action] = debounce(
+                                store[action],
+                                options.debounce[action]
+                            );
+                            return debouncedActions;
+                        },
+                        {}
+                    );
+
+                    console.log(result);
+
+                    return result;
+                }
+            });
 
             new Vue({
                 el: "#app",
