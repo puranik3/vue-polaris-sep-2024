@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Vue Demo Template</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+        />
+        <style>
+            .value {
+                display: inline-block;
+                min-width: 30px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+
+        <!--
+            Vue Demi is a developing utility allows you to write Universal Vue Libraries for Vue 2 & 3.
+            This script helps works with Composition API in Vue 2 itself!
+         -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-demi/0.14.8/index.iife.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pinia/2.1.7/pinia.iife.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+
+        <script>
+            const {
+                defineStore,
+                mapGetters, // same like Vuex
+                mapState, // same like Vuex
+                mapWritableState, // not there in Vuex
+                mapActions,
+                storeToRefs,
+            } = Pinia;
+
+            const { debounce } = _;
+
+            const { computed, ref } = Vue;
+
+            // -- composition API way ---
+            // Step 1: Define the Pinia Store
+            // defineStore does not create the store, it instead returns a composable (we called it useCounterStore), useCounterStore when called the first time, creates the store. It maintains it as a singleton object. It keeps returning the originally created store after that.
+            // we pass a function similar to the setup() function
+            const useCounterStore = defineStore("counter", () => {
+                // a store can use other stores
+                // const userStore = useUserStore();
+                // const membershipType = userStore.membershipType
+
+                // other composables can also be used - useFetch, useRouter, ...
+
+                const value = ref(0);
+
+                const doubleValue = computed(() => {
+                    return value.value * 2;
+                });
+
+                const doubleValuePlusOne = computed(() => {
+                    return doubleValue.value + 1;
+                });
+
+                function increment() {
+                    console.log(this.value);
+                    ++this.value;
+                }
+
+                function decrement() {
+                    --this.value;
+                }
+
+                // debounce: {
+                //     // custom option for the custom Plugin
+                //     increment: 1000,
+                //     decrement: 1000,
+                // },
+
+                // NOTES
+                //  - You MUST return ALL state properties (else there can be bugs)
+                return {
+                    value,
+                    doubleValue,
+                    doubleValuePlusOne,
+
+                    //  - Ideally, you MUST NOT return state got by calling OTHER composables
+                    // membershipType, // this is from useUserStore()
+
+                    decrement,
+                    increment,
+                };
+            });
+
+            const Counter = {
+                template: `
+                    <div class="counter">
+                        <button class="btn btn-dark btn-sm" @click="decrement">-</button>
+                        <div class="me-5">value = {{ value }}</div>
+                        <div class="me-5">doubleValue = {{ doubleValue }}</div>
+                        <div class="me-5">doubleValuePlusOne = {{ doubleValuePlusOne }}</div>
+                        <div>
+                            <!-- we are able to directly store the user inputs (from a form) in the Pinia store -->
+                            <input
+                                type="text"
+                                v-model="value"
+                            />
+                        </div>
+
+                        <button class="btn btn-dark btn-sm" @click="increment">+</button>
+                    </div>
+                `,
+                setup() {
+                    // either do not destructure the store object, or destructure using storeToRefs
+                    const store = useCounterStore();
+                    const { value, doubleValue, doubleValuePlusOne } =
+                        storeToRefs(store);
+                    const { decrement, increment } = store;
+
+                    return {
+                        value,
+                        doubleValue,
+                        doubleValuePlusOne,
+                        decrement,
+                        increment,
+                    };
+                },
+            };
+
+            Vue.use(Pinia.PiniaVuePlugin);
+            const pinia = Pinia.createPinia();
+
+            // hacky demo for composition API
+            pinia.use((context) => {
+                const { options, store } = context;
+                console.log(options, store);
+
+                // if (options.debounce) {
+                // we are overriding the actions with new ones
+                const result = Object.keys(options.actions).reduce(
+                    (debouncedActions, action) => {
+                        debouncedActions[action] = debounce(
+                            store[action],
+                            1000
+                        );
+                        return debouncedActions;
+                    },
+                    {}
+                );
+
+                console.log(result);
+
+                return result;
+                // }
+            });
+
+            new Vue({
+                el: "#app",
+                // Step 5: Add pinia object to share it across the app components
+                pinia: pinia,
+
+                components: {
+                    Counter,
+                },
+                template: `
+                    <div id="app" class="container my-4">
+                        <h1>Counter</h1>
+                        <hr />
+                        <Counter />
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>
