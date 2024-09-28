@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Vue Demo Template</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+        />
+        <style>
+            .value {
+                display: inline-block;
+                min-width: 30px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script>
+
+        <!--
+            Vue Demi is a developing utility allows you to write Universal Vue Libraries for Vue 2 & 3.
+            This script helps works with Composition API in Vue 2 itself!
+         -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-demi/0.14.8/index.iife.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pinia/2.1.7/pinia.iife.js"></script>
+
+        <script>
+            const {
+                defineStore,
+                mapGetters, // same like Vuex
+                mapState, // same like Vuex
+                mapWritableState, // not there in Vuex
+            } = Pinia;
+
+            // -- options API way ---
+            // Step 1: Define the Pinia Store
+            // defineStore does not create the store, it instead returns a composable (we called it useCounterStore), useCounterStore when called the first time, creates the store. It maintains it as a singleton object. It keeps returning the originally created store after that.
+            const useCounterStore = defineStore("counter", {
+                state() {
+                    return {
+                        value: 0,
+                    };
+                },
+                getters: {
+                    doubleValue(state) {
+                        return state.value * 2;
+                    },
+                    doubleValuePlusOne(state) {
+                        return this.doubleValue + 1;
+                    },
+                },
+            });
+
+            const Counter = {
+                template: `
+                    <div class="counter">
+                        <button class="btn btn-dark btn-sm">-</button>
+                        <div class="me-5">value = {{ value }}</div>
+                        <div class="me-5">doubleValue = {{ doubleValue }}</div>
+                        <div class="me-5">doubleValuePlusOne = {{ doubleValuePlusOne }}</div>
+                        <div>
+                            <!-- we are able to directly store the user inputs (from a form) in the Pinia store -->
+                            <input
+                                type="text"
+                                v-model="value"
+                            />
+                        </div>
+
+                        <button class="btn btn-dark btn-sm">+</button>
+                    </div>
+                `,
+                computed: {
+                    // array form (we also have object form)
+
+                    // mapState will give a readable value
+                    // ...mapState(useCounterStore, ["value"]),
+
+                    // in Pinia we can update (write to) the store state (no mutations etc.)
+                    ...mapWritableState(useCounterStore, ["value"]),
+
+                    ...mapGetters(useCounterStore, [
+                        "doubleValue",
+                        "doubleValuePlusOne",
+                    ]),
+                },
+            };
+
+            Vue.use(Pinia.PiniaVuePlugin);
+            const pinia = Pinia.createPinia();
+
+            new Vue({
+                el: "#app",
+                // Step 5: Add pinia object to share it across the app components
+                pinia: pinia,
+
+                components: {
+                    Counter,
+                },
+                template: `
+                    <div id="app" class="container my-4">
+                        <h1>Counter</h1>
+                        <hr />
+                        <Counter />
+                    </div>
+                `,
+            });
+        </script>
+    </body>
+</html>

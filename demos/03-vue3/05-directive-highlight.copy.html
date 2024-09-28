@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hello Vue</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+        <style>
+            .is-highlight {
+                background-color: yellow; /* default highlight color */
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script>
+
+        <script>
+            // removes highlight if value is not passed on update (i.e. undefined) or is falsy (null, undefined, false, '', 0)
+            // maintains color if color is not passed on update
+            function highlightEl(el, binding) {
+                console.log(binding);
+
+                const { arg, value } = binding;
+
+                if (!arg) {
+                    el.classList.add("is-highlight");
+
+                    if (value) {
+                        el.style.backgroundColor = value;
+                    }
+                } else {
+                    el.style[arg] = value;
+                }
+            }
+
+            const highlight = {
+                mounted: highlightEl,
+                updated: highlightEl,
+            };
+
+            const root = Vue.createApp({
+                // local registration
+                // directives: {
+                //     highlight,
+                // },
+                data() {
+                    return {
+                        value: true,
+                    };
+                },
+                template: `
+                    <div class="container my-5">
+                        <div v-highlight>
+                            Hello directive without argument and with value
+                        </div>
+                        <div v-highlight="'crimson'">
+                            Hello directive without argument and with value
+                        </div>
+                        <div v-highlight:color="'crimson'">
+                            Hello directive with argument and with value
+                        </div>
+                    </div>
+                `,
+            });
+
+            // global registration
+            root.directive("highlight", highlight);
+
+            root.mount("#app");
+        </script>
+    </body>
+</html>

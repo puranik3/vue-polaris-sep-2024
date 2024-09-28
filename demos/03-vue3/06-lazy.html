@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>The .lazy modifier</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.16/vue.min.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.4/vue.global.min.js"></script>
+
+        <script>
+            const root = Vue.createApp({
+                data() {
+                    return {
+                        firstName: "",
+                        lastName: "",
+                    };
+                },
+                template: `
+                    <div class="container my-5">
+                        <div class="mb-3">
+                            <input type="text" placeholder="John (normal syncing on @input)" v-model="firstName" class="form-control" />
+                            {{ firstName }}
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" placeholder="Doe (lazy syncing on @change - blur out to check)" v-model.lazy="lastName" class="form-control" />
+                            {{ lastName }}
+                        </div>
+                    </div>
+                `,
+            });
+
+            root.mount("#app");
+        </script>
+    </body>
+</html>
