@@ -36,6 +36,7 @@
                 mapGetters, // same like Vuex
                 mapState, // same like Vuex
                 mapWritableState, // not there in Vuex
+                mapActions,
             } = Pinia;
 
             // -- options API way ---
@@ -55,12 +56,22 @@
                         return this.doubleValue + 1;
                     },
                 },
+                // there is no concept of mutation in Pinia - anyone can update the state properties
+                // actions can be synchronous / asyncronous
+                actions: {
+                    decrement() {
+                        --this.value;
+                    },
+                    increment() {
+                        ++this.value;
+                    },
+                },
             });
 
             const Counter = {
                 template: `
                     <div class="counter">
-                        <button class="btn btn-dark btn-sm">-</button>
+                        <button class="btn btn-dark btn-sm" @click="decrement">-</button>
                         <div class="me-5">value = {{ value }}</div>
                         <div class="me-5">doubleValue = {{ doubleValue }}</div>
                         <div class="me-5">doubleValuePlusOne = {{ doubleValuePlusOne }}</div>
@@ -72,7 +83,7 @@
                             />
                         </div>
 
-                        <button class="btn btn-dark btn-sm">+</button>
+                        <button class="btn btn-dark btn-sm" @click="increment">+</button>
                     </div>
                 `,
                 computed: {
@@ -88,6 +99,16 @@
                         "doubleValue",
                         "doubleValuePlusOne",
                     ]),
+                },
+                methods: {
+                    ...mapActions(useCounterStore, ["decrement", "increment"]),
+
+                    // NOTE: This is not recommended. useCounterStore() being a composable should be called in setup() function or script. So in Vue 2, using map helpers is the right way to do it.
+                    // increment() {
+                    //     // destructuring works for methods
+                    //     const store = useCounterStore();
+                    //     store.increment();
+                    // },
                 },
             };
 
