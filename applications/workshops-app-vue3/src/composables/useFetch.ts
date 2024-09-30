@@ -25,6 +25,9 @@ const useFetch = <DataType>(fetcher: Fetcher, initialData: DataType | null) => {
       state.error = error as Error
     } finally {
       state.loading = false
+      console.log('****')
+      console.log('useFetch finally block:loading = ', state.loading)
+      console.log('****')
     }
   }
 

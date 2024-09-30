@@ -36,18 +36,14 @@ interface IWorkshop {
 
 // using fetch - we have not handled error using catch - whoever calls getWorkshops() will handle the error (if any)
 const getWorkshops = async (page = 1) => {
-  try {
-    const response = await axios.get<IWorkshop[]>(`/workshops`, {
-      params: {
-        _page: page
-      }
-    })
+  const response = await axios.get<IWorkshop[]>(`/workshops`, {
+    params: {
+      _page: page
+    }
+  })
 
-    // return response.data as IWorkshop[]
-    return response.data
-  } catch (error) {
-    throw new Error('Some error occured')
-  }
+  // return response.data as IWorkshop[]
+  return response.data
 }
 
 const getWorkshopById = async (id: number | string) => {

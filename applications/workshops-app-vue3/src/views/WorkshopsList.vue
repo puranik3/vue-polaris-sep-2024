@@ -4,9 +4,14 @@
     <v-divider class="my-6"></v-divider>
 
     <div v-if="loading">
-      <app-spinner :settings="spinnerSettings"></app-spinner>
+      <app-spinner
+        :settings="spinnerSettings"
+        data-testid="loading-spinner"
+      ></app-spinner>
     </div>
-    <div v-else-if="!loading && error">{{ error.message }}</div>
+    <div v-else-if="!loading && error" data-testid="loading-error">
+      {{ error.message }}
+    </div>
     <div v-else>
       <div class="my-6">You are viewing page {{ page }}</div>
       <div class="my-6">
@@ -14,7 +19,14 @@
         <v-btn class="mr-2" @click="next">Next</v-btn>
       </div>
       <v-row>
-        <v-col v-for="workshop of workshops" :key="workshop.id" :cols="12" :sm="6" :md="4">
+        <v-col
+          v-for="workshop of workshops"
+          :key="workshop.id"
+          :cols="12"
+          :sm="6"
+          :md="4"
+          class="d-flex"
+        >
           <workshops-list-item :workshop="workshop"></workshops-list-item>
         </v-col>
       </v-row>
@@ -46,7 +58,12 @@ const fetcher = async () => {
 }
 
 // like we normally use functions, the composables can be passed arguments for customization
-const { loading, error, data: workshops, fetchData } = useFetch<IWorkshop[]>(fetcher, [])
+const {
+  loading,
+  error,
+  data: workshops,
+  fetchData
+} = useFetch<IWorkshop[]>(fetcher, [])
 
 watch(page, fetchData)
 </script>
