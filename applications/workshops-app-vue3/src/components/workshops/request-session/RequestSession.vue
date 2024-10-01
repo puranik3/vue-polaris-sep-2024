@@ -2,6 +2,9 @@
   <div>
     <h2>Request a new session</h2>
     <hr />
+
+    <div>{{ message }}</div>
+
     <form @submit.prevent="requestToAddSession">
       <div class="mb-3">
         <v-text-field
@@ -83,7 +86,12 @@
         ></v-textarea>
       </div>
 
-      <v-btn type="submit" color="primary" :disabled="$v.$invalid">
+      <v-btn
+        type="submit"
+        color="primary"
+        :disabled="$v.$invalid"
+        data-testid="btn-submit"
+      >
         Request new session
       </v-btn>
     </form>
@@ -91,7 +99,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useVuelidate } from '@vuelidate/core'
 import {
@@ -118,6 +126,8 @@ const form = reactive({
   level: 'Basic' as Level,
   abstract: ''
 })
+
+const message = ref('')
 
 const levels = ['Basic', 'Intermediate', 'Advanced']
 
@@ -189,6 +199,8 @@ async function requestToAddSession() {
     // ideally we could move this backend call to the parent, i.e. in WorkshopDetails
     const updatedSession = await requestNewSession(session)
 
+    message.value = `Added session with id = ${updatedSession.id}`
+
     // inform the parent
     _emits('sessionAdd', {
       session: updatedSession
@@ -204,6 +216,7 @@ async function requestToAddSession() {
     // show a toast and clear out the fields
     // ...
 
+    message.value = (error as Error).message
     alert((error as Error).message)
   }
 }

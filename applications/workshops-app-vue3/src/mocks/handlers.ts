@@ -37,4 +37,5 @@ export const errorHandlers = [
   rest.get(`${apiBaseUrl}/workshops`, (req, res, ctx) => {
     return res(ctx.status(500), ctx.json(null))
   })
+
 ]
