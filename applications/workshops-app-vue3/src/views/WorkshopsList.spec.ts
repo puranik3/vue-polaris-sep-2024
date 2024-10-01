@@ -16,7 +16,7 @@ describe('WorkshopsList on load', () => {
     expect(loadingSpinnerEl).toBeInTheDocument()
   })
 
-  it.only('should fetch and show the images for workshops fetched', async () => {
+  it('should fetch and show the images for workshops fetched', async () => {
     render(WorkshopsList)
 
     for (let i = 0; i < 10; ++i) {

@@ -11,8 +11,6 @@ export const handlers = [
       req.url.searchParams.get('_page') || 0
     )
 
-    console.log('***************', page)
-
     if (page === 1) {
       console.log(workshops.slice(0, 10))
       return res(ctx.json(workshops.slice(0, 10)), ctx.status(200))

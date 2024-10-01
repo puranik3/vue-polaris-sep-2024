@@ -3,8 +3,12 @@ import { ref } from 'vue'
 type Validator = () => boolean
 
 // validateDecrement can be a function which checks the page (or other variables) and return true if decrement can be done
-const useCounter = (decrementIsValid: Validator, incrementIsValid: Validator) => {
-  const page = ref(1)
+const useCounter = (
+  initialValue: number,
+  decrementIsValid: Validator,
+  incrementIsValid: Validator
+) => {
+  const page = ref(initialValue)
 
   const decrement = () => {
     if (decrementIsValid()) {

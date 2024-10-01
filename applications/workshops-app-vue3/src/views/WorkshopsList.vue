@@ -35,18 +35,21 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue'
+
 import WorkshopsListItem from '@/components/workshops/workshops-list-item/WorkshopsListItem.vue'
 import useFetch from '@/composables/useFetch'
+import useCounter from '@/composables/useCounter'
+
 import { getWorkshops } from '@/services/workshops'
 import type { IWorkshop } from '@/services/workshops'
-import useCounter from '@/composables/useCounter'
-import { ref, watch } from 'vue'
 
 const {
   page,
   increment: next,
   decrement: previous
 } = useCounter(
+  1,
   () => true, // @todo Validation logic
   () => true // @todo
 )
