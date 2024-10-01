@@ -6,6 +6,9 @@ Vue JS Training, Sep 2024, Polaris
 
 ## Videos
 - The reason why tests were not running fine was the npm installations of the testing related packages was made from the top-level folder, rather than the project folder (you can see that there is a package.json in the top-level folder). I will upload the videos on Unit Testing (remaining tests) and Authentication utilizing Pinia store soon.
+- [Video 1 - Unit Testing - Workshops List](https://corporate-trainings.s3.amazonaws.com/polaris/vue-sep-2024/01-unit-testing-workshops-list.mp4)
+- [Video 2 - Unit Testing - Request Session - TBD]()
+- [Video 3 - Authentication with state management using Pinia - TBD]()
 
 ## Exercise
 - Filter in the app (Workshops list)

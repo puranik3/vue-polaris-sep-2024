@@ -1,6 +1,12 @@
 <template lang="html">
   <v-card class="w-100 pa-6">
-    <v-img :height="200" cover :src="workshop.imageUrl" :alt="workshop.name" contain />
+    <v-img
+      :height="200"
+      cover
+      :src="workshop.imageUrl"
+      :alt="workshop.name"
+      contain
+    />
     <v-card-item>
       <v-card-title>
         <router-link

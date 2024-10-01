@@ -3,6 +3,9 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/vue'
 import workshops from '../mocks/data/workshops.json'
 
+import { errorHandlers } from '@/mocks/handlers'
+import server from '@/mocks/server'
+
 describe('WorkshopsList on load', () => {
   beforeEach(() => {
     console.log('runs before an on load test runs')
@@ -32,7 +35,15 @@ describe('WorkshopsList on load', () => {
     expect(loadingSpinnerEl).not.toBeInTheDocument()
   })
 
-  it('should show an error on load if fetch of workshops fails', () => {
-    // throw new Error('not implemented')
+  it('should show an error on load if fetch of workshops fails', async () => {
+    server.use(...errorHandlers)
+
+    render(WorkshopsList)
+
+    const loadingSpinnerEl = screen.getByTestId('loading-spinner')
+    expect(loadingSpinnerEl).toBeInTheDocument()
+
+    const loadingErrorEl = await screen.findByTestId('loading-error')
+    expect(loadingErrorEl).toBeInTheDocument()
   })
 })
