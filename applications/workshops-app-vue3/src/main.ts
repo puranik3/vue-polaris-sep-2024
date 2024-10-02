@@ -1,6 +1,7 @@
 // import './assets/main.css'
 import vuetify from '@/plugins/vuetify'
 import Vuelidate from '@vuelidate/core'
+import { createPinia } from 'pinia'
 
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -14,8 +15,11 @@ import './services/configureAxios' // just running the file and not specifically
 // import 'bootstrap/dist/css/bootstrap.css'
 // import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+const pinia = createPinia()
+
 const app = createApp(App)
 
+app.use(pinia)
 app.use(router)
 app.use(vuetify)
 app.use(Vuelidate)
